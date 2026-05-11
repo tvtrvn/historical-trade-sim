@@ -155,7 +155,7 @@ jobs:
         with:
           fetch-depth: 30  # enough to count recent heartbeat commits
       - name: Escalate after 3 consecutive failures
-        uses: actions/github-script@v7
+        uses: actions/github-script@v9
         with:
           script: |
             const fs = require('fs');
