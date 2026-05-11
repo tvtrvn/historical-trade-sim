@@ -1,0 +1,65 @@
+# Dependabot — keeps the project secure forever without manual `npm audit` /
+# `pip-audit` runs. Generates PRs you can merge at leisure (or never; the app
+# keeps running). PRs land on `main` so they ALSO count as repo activity,
+# providing a second safety net against GitHub's 60-day schedule auto-disable.
+#
+# We deliberately do NOT enable auto-merge:
+#   • Auto-merging dependency PRs has a well-documented track record of
+#     shipping malicious packages (e.g. `node-ipc` 2022).
+#   • A portfolio app needs zero ops, not zero review of unsigned code.
+#   • PRs sit in the queue forever harmlessly until you decide to look.
+#
+# Cadence is weekly (not daily) so the operator inbox stays calm. Security
+# advisories are picked up immediately regardless of schedule, since
+# Dependabot's `security-updates` mechanism is always-on.
+
+version: 2
+updates:
+  # ── Backend (Python) ────────────────────────────────────────────────────
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "python"]
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      # Bundle minor/patch updates so the operator reviews ONE PR per ecosystem
+      # per week instead of a flood. Major bumps still get their own PR.
+      backend-minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  # ── Frontend (npm) ──────────────────────────────────────────────────────
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "javascript"]
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    groups:
+      frontend-minor-and-patch:
+        update-types: ["minor", "patch"]
+
+  # ── GitHub Actions themselves ───────────────────────────────────────────
+  # Pins like `actions/checkout@v4` get patch updates here. Tiny PR volume.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+      time: "08:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 3
+    labels: ["dependencies", "github-actions"]
+    commit-message:
+      prefix: "chore(ci)"

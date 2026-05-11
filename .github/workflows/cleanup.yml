@@ -1,0 +1,213 @@
+name: TTL cleanup & heartbeat
+
+# Three jobs in one daily workflow — all designed so the project runs
+# *forever* without operator intervention:
+#
+#   1. cleanup  — POST /api/v1/maintenance/cleanup
+#                 • deletes scenario_results older than RESULT_RETENTION_DAYS
+#                 • the request also wakes Koyeb (free tier scales to zero)
+#                 • the DB call also wakes Neon (auto-suspends after ~14d idle)
+#
+#   2. heartbeat — commits .github/last-cleanup.txt back to main
+#                 • GitHub auto-disables `schedule:` workflows after 60 days
+#                   of *repository* inactivity (workflow runs themselves don't
+#                   count). A daily commit keeps the schedule alive forever.
+#                 • commit message contains [skip ci] so other CI doesn't fire
+#
+#   3. failure-watch — opens a GitHub issue on persistent (≥3d) cleanup
+#                 failures, so the operator gets exactly *one* alert instead
+#                 of a daily email storm.
+#
+# Required repo configuration:
+#   - Variable: BACKEND_URL          e.g. https://api.your-deploy.koyeb.app
+#   - Secret:   MAINTENANCE_TOKEN    must match Koyeb env var of the same name
+#
+# To configure (Repo → Settings):
+#   • Secrets and variables → Actions → Variables → "New repository variable"
+#       BACKEND_URL = https://api.your-deploy.koyeb.app
+#   • Secrets and variables → Actions → Secrets   → "New repository secret"
+#       MAINTENANCE_TOKEN = <output of `openssl rand -hex 32`>
+
+on:
+  schedule:
+    # 03:17 UTC daily — off-peak, slightly off the hour to dodge thundering
+    # herds against shared cron infrastructure.
+    - cron: "17 3 * * *"
+  workflow_dispatch: {}  # allow manual runs from the Actions tab
+
+# We need contents:write to push the heartbeat commit, and issues:write so the
+# failure-watch step can open/update an alert issue. Everything else is read.
+permissions:
+  contents: write
+  issues: write
+
+# Avoid two heartbeat pushes racing if the previous run is still alive.
+concurrency:
+  group: cleanup-and-heartbeat
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    name: Cleanup + heartbeat
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      cleanup_succeeded: ${{ steps.cleanup.outcome == 'success' }}
+    steps:
+      - name: Validate required configuration
+        run: |
+          if [ -z "${{ vars.BACKEND_URL }}" ]; then
+            echo "::error::Repository variable BACKEND_URL is not set."
+            exit 1
+          fi
+          if [ -z "${{ secrets.MAINTENANCE_TOKEN }}" ]; then
+            echo "::error::Repository secret MAINTENANCE_TOKEN is not set."
+            exit 1
+          fi
+
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          # Schedules run against default branch HEAD in detached state.
+          # We only need the latest commit — we just append to one file.
+          fetch-depth: 1
+          # The default GITHUB_TOKEN is enough to push back to the same repo
+          # because we declared `permissions: contents: write` above. No PAT.
+          persist-credentials: true
+
+      - name: POST /api/v1/maintenance/cleanup
+        id: cleanup
+        env:
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
+          MAINTENANCE_TOKEN: ${{ secrets.MAINTENANCE_TOKEN }}
+        run: |
+          set -euo pipefail
+          # Strip any trailing slash so we always hit the right URL.
+          base="${BACKEND_URL%/}"
+          # --fail-with-body: exit non-zero on 4xx/5xx but still print the body.
+          # --retry: 3 attempts with backoff for transient errors, including a
+          #          Neon cold-start that rejects the first try.
+          response=$(mktemp)
+          status=$(
+            curl --silent --show-error --fail-with-body \
+                 --retry 3 --retry-all-errors --retry-delay 5 \
+                 --max-time 60 \
+                 -o "$response" -w "%{http_code}" \
+                 -X POST \
+                 -H "Authorization: Bearer ${MAINTENANCE_TOKEN}" \
+                 -H "Content-Length: 0" \
+                 "${base}/api/v1/maintenance/cleanup"
+          )
+          echo "HTTP $status"
+          cat "$response"
+          echo
+          deleted=$(jq -r '.deleted_results // empty' "$response" 2>/dev/null || true)
+          if [ -n "$deleted" ]; then
+            echo "### TTL cleanup" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Deleted **${deleted}** old scenario_result row(s)." >> "$GITHUB_STEP_SUMMARY"
+            jq . "$response" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Heartbeat commit (defeat 60-day auto-disable)
+        # Run even when cleanup fails. Otherwise a 60-day failure streak would
+        # silently disable the schedule; we want the cron to keep firing so
+        # the failure-watch step keeps escalating.
+        if: always()
+        env:
+          OUTCOME: ${{ steps.cleanup.outcome }}
+        run: |
+          set -euo pipefail
+          mkdir -p .github
+          ts="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          # Single source of truth — readable by humans + parseable by the
+          # failure-watch step on the next run.
+          cat > .github/last-cleanup.txt <<EOF
+          last_run_at: ${ts}
+          run_id: ${{ github.run_id }}
+          outcome: ${OUTCOME}
+          retention_days: ${{ vars.RESULT_RETENTION_DAYS || '30 (default)' }}
+          EOF
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .github/last-cleanup.txt
+          if git diff --cached --quiet; then
+            echo "No heartbeat changes — nothing to commit."
+            exit 0
+          fi
+          # [skip ci] tells GitHub not to run any *other* push-triggered
+          # workflows on this commit. We still consume one repo-activity
+          # event, which is exactly what we need to defeat 60-day disable.
+          git commit -m "chore(cron): heartbeat ${ts} (outcome=${OUTCOME}) [skip ci]"
+          # `HEAD:main` is required because schedule runs check out HEAD
+          # detached; we have to name the destination ref explicitly.
+          git push origin HEAD:${{ github.event.repository.default_branch }}
+
+  failure-watch:
+    name: Open issue on persistent failure
+    needs: cleanup
+    if: ${{ always() && needs.cleanup.result == 'failure' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 30  # enough to count recent heartbeat commits
+      - name: Escalate after 3 consecutive failures
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = '.github/last-cleanup.txt';
+            // Walk the recent heartbeat commits to count consecutive failures.
+            // Each heartbeat row records `outcome: <success|failure|cancelled>`.
+            const log = require('child_process').execSync(
+              `git log -n 10 --pretty=format:"%H" -- ${path}`
+            ).toString().trim().split('\n').filter(Boolean);
+            let streak = 0;
+            for (const sha of log) {
+              const blob = require('child_process').execSync(
+                `git show ${sha}:${path}`
+              ).toString();
+              const m = blob.match(/^outcome:\s*(\w+)/m);
+              if (m && m[1] === 'failure') streak++;
+              else break;
+            }
+            console.log(`consecutive failure streak (incl. this run): ${streak + 1}`);
+            if (streak + 1 < 3) {
+              core.info('Streak under threshold — not opening an issue yet.');
+              return;
+            }
+
+            const title = 'TTL cleanup cron has been failing for 3+ days';
+            const { data: existing } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'cron-alert',
+              state: 'open',
+              per_page: 5,
+            });
+            if (existing.find(i => i.title === title)) {
+              core.info('Alert issue already open — nothing to do.');
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              labels: ['cron-alert'],
+              body: [
+                `The daily TTL cleanup workflow has failed **3+ runs in a row**.`,
+                ``,
+                `**Latest failed run:** ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`,
+                ``,
+                `**Likely causes (in order of frequency):**`,
+                `1. \`MAINTENANCE_TOKEN\` was rotated in Koyeb but not in GitHub secrets.`,
+                `2. \`BACKEND_URL\` is wrong (Koyeb service URL changed).`,
+                `3. The backend is down. Check ${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions for log details.`,
+                `4. Neon project was deleted or the connection string changed.`,
+                ``,
+                `Once you fix the underlying issue, **close this issue manually**. The cron will reopen it if failures persist.`,
+              ].join('\n'),
+            });

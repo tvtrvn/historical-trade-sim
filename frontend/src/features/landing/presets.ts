@@ -1,0 +1,70 @@
+/** Sample scenario presets used by the landing page and the builder's
+ * "Try a sample" affordance. The slugs are stable so we can deep-link.
+ */
+
+import type { ScenarioIn } from '@/lib/api/types';
+
+export const SAMPLE_PRESETS: Record<string, ScenarioIn & { displayTitle: string }> = {
+  'sample-1': {
+    displayTitle: 'AAPL since 2011',
+    name: 'AAPL since 2011',
+    mode: 'single',
+    benchmark_symbol: 'SPY',
+    start_date: '2011-01-03',
+    end_date: '2026-04-29',
+    initial_amount: 10000,
+    recurring_amount: 0,
+    recurring_freq: 'none',
+    fees_pct: 0,
+    dividend_reinvest: true,
+    positions: [{ symbol: 'AAPL', weight_pct: 100 }],
+  },
+  'sample-2': {
+    displayTitle: '$500/mo into SPY',
+    name: '$500/mo into SPY (2015 → today)',
+    mode: 'single',
+    benchmark_symbol: 'QQQ',
+    start_date: '2015-01-02',
+    end_date: '2026-04-29',
+    initial_amount: 0,
+    recurring_amount: 500,
+    recurring_freq: 'monthly',
+    fees_pct: 0,
+    dividend_reinvest: true,
+    positions: [{ symbol: 'SPY', weight_pct: 100 }],
+  },
+  'sample-3': {
+    displayTitle: 'Mag-Five basket — 2016',
+    name: 'Mag-Five basket — 2016',
+    mode: 'basket',
+    benchmark_symbol: 'SPY',
+    start_date: '2016-01-04',
+    end_date: '2026-04-29',
+    initial_amount: 25000,
+    recurring_amount: 0,
+    recurring_freq: 'none',
+    fees_pct: 0,
+    dividend_reinvest: true,
+    positions: [
+      { symbol: 'AAPL', weight_pct: 25 },
+      { symbol: 'MSFT', weight_pct: 25 },
+      { symbol: 'GOOGL', weight_pct: 20 },
+      { symbol: 'AMZN', weight_pct: 20 },
+      { symbol: 'NVDA', weight_pct: 10 },
+    ],
+  },
+  'sample-4': {
+    displayTitle: 'NVDA vs MSFT',
+    name: 'NVDA since 2018',
+    mode: 'single',
+    benchmark_symbol: 'QQQ',
+    start_date: '2018-01-02',
+    end_date: '2026-04-29',
+    initial_amount: 10000,
+    recurring_amount: 0,
+    recurring_freq: 'none',
+    fees_pct: 0,
+    dividend_reinvest: true,
+    positions: [{ symbol: 'NVDA', weight_pct: 100 }],
+  },
+};
