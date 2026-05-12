@@ -45,6 +45,20 @@ class Settings(BaseSettings):
     # entirely (recommended for local dev). Generate with `openssl rand -hex 32`.
     maintenance_token: str = Field(default="")
 
+    # ── Market-data provider (real prices) ────────────────────────────────
+    # Free-tier Tiingo API key. When set, the fetcher tries Tiingo first
+    # (split/dividend-adjusted EOD). When empty, the chain becomes
+    # ``Stooq → synthetic GBM`` and the project still runs offline.
+    tiingo_api_key: str = Field(default="")
+    # When True, ``seed_prices`` re-fetches every ticker even if rows already
+    # exist (one-off "wipe synthetic, repopulate with real" upgrade). Keep
+    # False in steady state — refresh is incremental.
+    marketdata_force_refresh: bool = Field(default=False)
+    # Earliest date we ever request from a provider. Tiingo & Stooq both
+    # go back to the 1990s for most large caps; we limit to keep the seed
+    # under a couple of MB per ticker. SECURITIES list assumes 2010+ data.
+    marketdata_history_start: str = Field(default="2010-01-01")
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [o.strip() for o in self.cors_allow_origins.split(",") if o.strip()]

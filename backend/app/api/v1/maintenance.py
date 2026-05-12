@@ -24,6 +24,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.config import get_settings
 from app.db.base import get_session
 from app.services.maintenance import cleanup_old_results
+from app.services.marketdata.refresh import refresh_all
 
 router = APIRouter(prefix="/maintenance", tags=["maintenance"])
 log = logging.getLogger("api.maintenance")
@@ -85,4 +86,53 @@ async def cleanup(
     report = await cleanup_old_results(
         db, retention_days=settings.result_retention_days
     )
+    return JSONResponse(status_code=status.HTTP_200_OK, content=report.to_dict())
+
+
+@router.post(
+    "/refresh-prices",
+    summary="Pull the latest daily closes from the marketdata fetcher",
+)
+async def refresh_prices(
+    authorization: str | None = Header(default=None, alias="Authorization"),
+    db: AsyncSession = Depends(get_session),
+) -> JSONResponse:
+    """Walk every catalog ticker and append any new daily closes.
+
+    Same auth contract as ``/cleanup``: 503 when the maintenance token
+    isn't configured, 401 when wrong, 200 with a per-symbol report
+    otherwise. Failures on individual tickers are recorded inside the
+    body rather than producing a non-200 response — the caller (the cron)
+    only marks the workflow red on infrastructure failures (5xx, network),
+    not data ones.
+    """
+    settings = get_settings()
+
+    if not settings.maintenance_token:
+        return JSONResponse(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            content={
+                "error": {
+                    "code": "MAINTENANCE_DISABLED",
+                    "message": "MAINTENANCE_TOKEN is not configured.",
+                    "field": None,
+                }
+            },
+        )
+
+    if not _check_token(authorization):
+        log.warning("maintenance: rejected refresh attempt (bad token)")
+        return JSONResponse(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            content={
+                "error": {
+                    "code": "UNAUTHORIZED",
+                    "message": "Invalid or missing maintenance token.",
+                    "field": None,
+                }
+            },
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+
+    report = await refresh_all(db)
     return JSONResponse(status_code=status.HTTP_200_OK, content=report.to_dict())

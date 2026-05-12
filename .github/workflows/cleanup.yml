@@ -1,20 +1,25 @@
-name: TTL cleanup & heartbeat
+name: Daily refresh, TTL cleanup & heartbeat
 
-# Three jobs in one daily workflow — all designed so the project runs
+# Four steps in one daily workflow — all designed so the project runs
 # *forever* without operator intervention:
 #
-#   1. cleanup  — POST /api/v1/maintenance/cleanup
-#                 • deletes scenario_results older than RESULT_RETENTION_DAYS
-#                 • the request also wakes Koyeb (free tier scales to zero)
-#                 • the DB call also wakes Neon (auto-suspends after ~14d idle)
+#   1. refresh-prices — POST /api/v1/maintenance/refresh-prices
+#                 • appends today's closes per ticker via the marketdata
+#                   fetcher (Tiingo → Stooq → synthetic GBM)
+#                 • this is what keeps the simulator's charts up-to-date
+#                 • per-ticker failures are recorded in the body, not 500'd
 #
-#   2. heartbeat — commits .github/last-cleanup.txt back to main
+#   2. cleanup  — POST /api/v1/maintenance/cleanup
+#                 • deletes scenario_results older than RESULT_RETENTION_DAYS
+#                 • this request also keeps Koyeb + Neon warm
+#
+#   3. heartbeat — commits .github/last-cleanup.txt back to main
 #                 • GitHub auto-disables `schedule:` workflows after 60 days
 #                   of *repository* inactivity (workflow runs themselves don't
 #                   count). A daily commit keeps the schedule alive forever.
 #                 • commit message contains [skip ci] so other CI doesn't fire
 #
-#   3. failure-watch — opens a GitHub issue on persistent (≥3d) cleanup
+#   4. failure-watch — opens a GitHub issue on persistent (≥3d) cleanup
 #                 failures, so the operator gets exactly *one* alert instead
 #                 of a daily email storm.
 #
@@ -74,6 +79,50 @@ jobs:
           # The default GITHUB_TOKEN is enough to push back to the same repo
           # because we declared `permissions: contents: write` above. No PAT.
           persist-credentials: true
+
+      - name: POST /api/v1/maintenance/refresh-prices
+        id: refresh
+        # Refresh first so the cleanup step (and any subsequent user request)
+        # sees today's closes. Refresh is *advisory* — a failure here doesn't
+        # block cleanup, doesn't open an alert issue, and is recoverable on
+        # the next run. Per-ticker errors are reported inside the 200 body.
+        continue-on-error: true
+        env:
+          BACKEND_URL: ${{ vars.BACKEND_URL }}
+          MAINTENANCE_TOKEN: ${{ secrets.MAINTENANCE_TOKEN }}
+        run: |
+          set -euo pipefail
+          base="${BACKEND_URL%/}"
+          response=$(mktemp)
+          status=$(
+            curl --silent --show-error --fail-with-body \
+                 --retry 3 --retry-all-errors --retry-delay 5 \
+                 --max-time 120 \
+                 -o "$response" -w "%{http_code}" \
+                 -X POST \
+                 -H "Authorization: Bearer ${MAINTENANCE_TOKEN}" \
+                 -H "Content-Length: 0" \
+                 "${base}/api/v1/maintenance/refresh-prices"
+          )
+          echo "HTTP $status"
+          cat "$response"
+          echo
+          rows=$(jq -r '.rows_inserted // empty' "$response" 2>/dev/null || true)
+          processed=$(jq -r '.symbols_processed // empty' "$response" 2>/dev/null || true)
+          duration=$(jq -r '.duration_ms // empty' "$response" 2>/dev/null || true)
+          if [ -n "$rows" ]; then
+            {
+              echo "### Daily price refresh"
+              echo ""
+              echo "- Tickers processed: **${processed}**"
+              echo "- Rows inserted: **${rows}**"
+              echo "- Duration: **${duration} ms**"
+              echo ""
+              echo '```json'
+              jq '{symbols_processed, symbols_with_new_data, rows_inserted, duration_ms, errors}' "$response"
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: POST /api/v1/maintenance/cleanup
         id: cleanup

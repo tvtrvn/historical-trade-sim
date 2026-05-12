@@ -58,7 +58,9 @@ End-to-end deployment takes roughly 20–30 minutes the first time.
    | `MAX_SCENARIOS_PER_CLIENT`       | `100`                                                              | per-client storage cap (anti-spam)                   |
    | `TRUST_PROXY`                    | `true`                                                             | Koyeb terminates TLS at the edge and forwards `X-Forwarded-For`; turning this on lets the rate limiter see the real client IP. **Only enable behind a trusted proxy.** |
    | `RESULT_RETENTION_DAYS`          | `30`                                                               | TTL for `scenario_results`. Saved scenarios are kept forever; only the heavy result payload expires. |
-   | `MAINTENANCE_TOKEN`              | `openssl rand -hex 32` output                                      | Bearer token for `POST /api/v1/maintenance/cleanup`. Empty = endpoint disabled. **Use the same value as the GitHub repo secret** so the daily cron can authenticate. |
+   | `MAINTENANCE_TOKEN`              | `openssl rand -hex 32` output                                      | Bearer token for `POST /api/v1/maintenance/{cleanup,refresh-prices}`. Empty = endpoints disabled. **Use the same value as the GitHub repo secret** so the daily cron can authenticate. |
+   | `TIINGO_API_KEY`                 | free key from [tiingo.com](https://www.tiingo.com/account/api/token) — *optional* | When set, the market-data fetcher tries Tiingo first for split/dividend-adjusted closes. Empty → falls back to Yahoo Finance (still real, no key required). |
+   | `MARKETDATA_FORCE_REFRESH`       | `false` (set to `true` once to wipe + repopulate)                  | Toggle to upgrade an existing deploy from synthetic to real data: set `true`, redeploy, set back to `false`. |
 
 7. Deploy. The first deploy will:
    - Run `alembic upgrade head` (creates the schema).
@@ -139,6 +141,59 @@ the run summary, and times out at 5 minutes.
 Change `RESULT_RETENTION_DAYS` in the Koyeb env panel and redeploy. The
 range is 1–3650; `30` is the default. Shorter = smaller DB but users see
 more "Re-run" prompts on old scenarios; longer = more storage.
+
+---
+
+## 2c. Market data — Tiingo → Yahoo → synthetic
+
+Prices come from a tiered fallback chain (`backend/app/services/marketdata/`).
+You get **real adjusted closes** with zero ongoing effort.
+
+### How the chain works
+
+1. **Tiingo** is tried first if `TIINGO_API_KEY` is set. Split- and
+   dividend-adjusted closes, 1,000 free requests/day, ~80× our actual usage.
+   Sign up: [tiingo.com](https://www.tiingo.com/account/api/token) (free,
+   no credit card).
+2. **Yahoo Finance chart endpoint** is the no-key fallback. No signup.
+   What `yfinance` scrapes, just at a more stable URL. Adjusted closes
+   covering 16+ years.
+3. **Synthetic GBM** is the always-on terminator. Deterministic Brownian
+   motion calibrated to each ticker's μ/σ, anchored to a realistic recent
+   close. Used only when both networks above fail.
+
+**Recommended:** set `TIINGO_API_KEY` in Koyeb for production-grade
+adjusted prices. The app works fine without it (Yahoo handles real data
+just as well day-to-day), but Tiingo's data team explicitly QAs splits
+and dividends, so it's a strictly better signal on edge-case tickers.
+
+### Upgrading an existing deploy from synthetic to real data
+
+If your Koyeb DB was already seeded with synthetic prices (pre-marketdata),
+flip the wipe-and-repopulate flag:
+
+1. In Koyeb env vars: set `MARKETDATA_FORCE_REFRESH=true`.
+2. **Redeploy.** The seeder logs `MARKETDATA_FORCE_REFRESH=true — wiping
+   existing prices for AAPL` for each ticker, then fetches fresh data.
+3. Once the deploy goes healthy (~30 s for all 12 tickers), set
+   `MARKETDATA_FORCE_REFRESH=false` (or just remove the env var). The
+   refresh in steady state is **incremental** — only today's close gets
+   pulled each day.
+
+### Daily refresh cron
+
+The same daily workflow that runs cleanup also calls
+`POST /api/v1/maintenance/refresh-prices` first, which appends the new
+day's close per ticker. Per-symbol failures are reported in the 200 body
+rather than 500-ing the entire job — one bad ticker can't break the run.
+
+### Adding a new stock
+
+Append a `TickerSpec(symbol, name, exchange, asset_class, logo_url, μ, σ, anchor_price)`
+to `SECURITIES` in `backend/app/services/seed/data.py`, commit, push. On
+next Koyeb deploy the seeder detects the new symbol, fetches its history
+from the active provider, and adds it. The μ/σ/anchor numbers are only
+used by the synthetic fallback — they don't affect real-data accuracy.
 
 ---
 

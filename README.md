@@ -8,7 +8,7 @@
 [![Frontend: Vite + React + TS](https://img.shields.io/badge/Frontend-Vite%20%2B%20React%20%2B%20TS-3D6CFF?style=flat&labelColor=0E1424)](frontend/)
 [![Backend: FastAPI + Postgres](https://img.shields.io/badge/Backend-FastAPI%20%2B%20Postgres-A78BFA?style=flat&labelColor=0E1424)](backend/)
 [![Design: UI%2FUX Pro Max](https://img.shields.io/badge/Design-UI%2FUX%20Pro%20Max-F4C770?style=flat&labelColor=0E1424)](design-system/historical-trade-scenario-simulator/MASTER.md)
-[![Tests: 50 passing](https://img.shields.io/badge/Tests-50%20passing-5EE2A0?style=flat&labelColor=0E1424)](backend/tests/)
+[![Tests: 76 passing](https://img.shields.io/badge/Tests-76%20passing-5EE2A0?style=flat&labelColor=0E1424)](backend/tests/)
 
 </div>
 
@@ -70,11 +70,13 @@ feel overwhelmed.
 │   ├── alembic/                        # Database migrations (incl. TTL run_at index)
 │   ├── scripts/
 │   │   ├── seed.py                     # Seed historical prices + sample scenarios
-│   │   └── cleanup.py                  # Manual / cron-friendly TTL cleanup CLI
+│   │   ├── cleanup.py                  # Manual / cron-friendly TTL cleanup CLI
+│   │   └── refresh_prices.py           # Manual / cron-friendly market-data refresh CLI
 │   ├── tests/
-│   │   ├── test_finance.py             # 14 unit tests for the engine
+│   │   ├── test_finance.py             # 18 unit tests for the engine
 │   │   ├── test_security.py            # 26 e2e tests for hardening (rate limit, headers, IDOR…)
-│   │   └── test_maintenance.py         # 10 tests for the storage TTL job + auth contract
+│   │   ├── test_maintenance.py         # 10 tests for the storage TTL job + auth contract
+│   │   └── test_marketdata.py          # 22 tests for the Tiingo + Yahoo + fetcher chain
 │   ├── Dockerfile
 │   ├── pyproject.toml
 │   └── .env.example
@@ -169,6 +171,39 @@ DENY`, a `Referrer-Policy`, a hardened `Permissions-Policy`, COOP/CORP, and
 Errors use a single `{"error": {"code", "message", "field"}}` envelope and
 **never** echo user input back. See `INTERVIEW_TALKING_POINTS.md` for the
 full audit + remediation table.
+
+## Real market data (Tiingo → Yahoo → synthetic)
+
+Prices come from a **tiered fallback chain** so the simulator never breaks,
+even when individual data providers go down:
+
+1. **Tiingo** (primary, requires free API key — sign up at
+   [tiingo.com](https://www.tiingo.com/account/api/token)). Split- and
+   dividend-adjusted closes, 1,000 req/day on the free tier. ~80× our actual
+   usage of 12 daily refresh calls.
+2. **Yahoo Finance chart endpoint** (no key, no signup). What `yfinance`
+   scrapes, but at the more stable `query1.finance.yahoo.com/v8/finance/chart`
+   route. Adjusted closes, real volumes, 16+ years of history.
+3. **Synthetic GBM** (always-on terminator). Deterministic Brownian motion
+   calibrated to each ticker's historical (μ, σ), anchored to a realistic
+   recent close. Used only when both networks above fail — the project
+   literally cannot fail to boot.
+
+The orchestrator (`app/services/marketdata/fetcher.py`) walks the chain in
+order: first non-empty wins; unavailable / transient / parser errors fall
+through to the next tier; logs at every step. Each provider is a thin async
+client tested with `httpx.MockTransport` (offline, deterministic).
+
+The daily GitHub Actions cron also hits
+`POST /api/v1/maintenance/refresh-prices` once a day to append the latest
+close per ticker. Per-symbol failures are reported in the 200 response body
+rather than 500'ing the whole run.
+
+To **add a stock**: append one entry to `SECURITIES` in
+[`backend/app/services/seed/data.py`](backend/app/services/seed/data.py),
+commit, push. The next deploy auto-fetches its history. To **upgrade an
+existing deploy from synthetic to real data**, set `MARKETDATA_FORCE_REFRESH=true`
+on Koyeb once, redeploy, then unset.
 
 ## Storage TTL (daily cron)
 
@@ -274,6 +309,16 @@ glossary so a non-finance reader can find every term in one place.
   project genuinely runs forever on free tiers without operator input.
   Rounded out with a one-issue-per-streak failure watcher so I get exactly
   one alert (not 30) when something does break.
+- **Resilient market data via a 3-tier fallback chain.** Real historical
+  prices are non-negotiable for portfolio credibility, but every free
+  provider eventually rate-limits, paywall-pivots, or breaks their schema.
+  My first design used Stooq as a no-auth fallback; days into rollout
+  Stooq put their CSV endpoint behind a captcha-acquired API key. The
+  tiered design absorbed it cleanly: I dropped a `yahoo.py` implementing
+  the same `PriceProvider` Protocol and the orchestrator picked it up
+  with a one-line change. Tiingo → Yahoo → synthetic GBM: real adjusted
+  closes when both networks work, deterministic-but-plausible series
+  when they don't. 22 tests pin the contract with `httpx.MockTransport`.
 
 For interview-grade depth on each of these, see
 [`docs/INTERVIEW_TALKING_POINTS.md`](docs/INTERVIEW_TALKING_POINTS.md).

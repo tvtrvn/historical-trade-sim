@@ -1,4 +1,9 @@
-"""Idempotent seeding for the catalog + historical prices + sample scenarios."""
+"""Idempotent seeding for the catalog + historical prices + sample scenarios.
+
+Prices come from the tiered market-data fetcher (``app.services.marketdata``):
+Tiingo → Stooq → synthetic GBM. The seeder doesn't care which source actually
+served the data; it just persists whatever the orchestrator returns.
+"""
 
 from __future__ import annotations
 
@@ -9,6 +14,7 @@ from decimal import Decimal
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import get_settings
 from app.models import (
     Benchmark,
     HistoricalPrice,
@@ -18,7 +24,8 @@ from app.models import (
     ScenarioPosition,
     Security,
 )
-from app.services.seed.data import BENCHMARKS, SECURITIES, generate_price_path
+from app.services.marketdata import fetch_history
+from app.services.seed.data import BENCHMARKS, SECURITIES
 from app.services.simulator import run_and_persist
 
 log = logging.getLogger("seed")
@@ -83,6 +90,18 @@ async def seed_catalog(db: AsyncSession) -> dict[str, Security]:
 
 
 async def seed_prices(db: AsyncSession, securities: dict[str, Security]) -> None:
+    """Backfill the full historical window for every ticker in the catalog.
+
+    Idempotent at the per-ticker grain: a ticker that already has *any*
+    price row is skipped unless ``MARKETDATA_FORCE_REFRESH=true``, which
+    is the explicit "wipe and re-pull from the API" knob (used once when
+    upgrading from synthetic to real data on an already-populated DB).
+    """
+    settings = get_settings()
+    start = date.fromisoformat(settings.marketdata_history_start)
+    end = date.today()
+    force = settings.marketdata_force_refresh
+
     for spec in SECURITIES:
         sec = securities[spec.symbol]
         any_row = (
@@ -90,22 +109,38 @@ async def seed_prices(db: AsyncSession, securities: dict[str, Security]) -> None
                 select(HistoricalPrice).where(HistoricalPrice.security_id == sec.id).limit(1)
             )
         ).scalar_one_or_none()
-        if any_row:
+
+        if any_row and not force:
             log.info("prices already seeded for %s, skipping", spec.symbol)
             continue
-        log.info("generating prices for %s", spec.symbol)
-        path = generate_price_path(spec)
+
+        if any_row and force:
+            log.warning("MARKETDATA_FORCE_REFRESH=true — wiping existing prices for %s", spec.symbol)
+            await db.execute(
+                HistoricalPrice.__table__.delete().where(HistoricalPrice.security_id == sec.id)
+            )
+            await db.flush()
+
+        log.info("fetching prices for %s (%s → %s)", spec.symbol, start, end)
+        points = await fetch_history(spec.symbol, start=start, end=end)
+        if not points:
+            # Even the synthetic provider returns rows for everything in
+            # SECURITIES, so an empty result here is a real surprise —
+            # surface it loudly but keep going so one bad ticker doesn't
+            # block the rest of the seed.
+            log.error("no price data available for %s — skipping (chart will be empty)", spec.symbol)
+            continue
+
         rows = [
             HistoricalPrice(
                 security_id=sec.id,
-                price_date=d,
-                close_price=Decimal(f"{p:.4f}"),
-                adj_close=Decimal(f"{p:.4f}"),
-                volume=None,
+                price_date=p.price_date,
+                close_price=p.close_price,
+                adj_close=p.adj_close,
+                volume=p.volume,
             )
-            for d, p in path
+            for p in points
         ]
-        # batch insert in chunks to keep memory tame
         BATCH = 1000
         for i in range(0, len(rows), BATCH):
             db.add_all(rows[i : i + BATCH])
