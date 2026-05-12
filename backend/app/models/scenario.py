@@ -36,7 +36,16 @@ class Scenario(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(128), nullable=False)
 
     mode: Mapped[ScenarioMode] = mapped_column(
-        Enum(ScenarioMode, name="scenario_mode"), nullable=False, default=ScenarioMode.SINGLE
+        # `values_callable` makes SQLAlchemy persist .value (e.g. "single") instead
+        # of .name ("SINGLE"). Required for native-enum backends like PostgreSQL,
+        # whose enum type is declared in migration 0001 with lowercase members.
+        Enum(
+            ScenarioMode,
+            name="scenario_mode",
+            values_callable=lambda e: [m.value for m in e],
+        ),
+        nullable=False,
+        default=ScenarioMode.SINGLE,
     )
     benchmark_symbol: Mapped[str] = mapped_column(String(16), nullable=False, default="SPY")
 
@@ -48,7 +57,11 @@ class Scenario(Base, TimestampMixin):
         Numeric(18, 2), nullable=False, default=Decimal("0")
     )
     recurring_freq: Mapped[RecurringFrequency] = mapped_column(
-        Enum(RecurringFrequency, name="recurring_frequency"),
+        Enum(
+            RecurringFrequency,
+            name="recurring_frequency",
+            values_callable=lambda e: [m.value for m in e],
+        ),
         nullable=False,
         default=RecurringFrequency.NONE,
     )

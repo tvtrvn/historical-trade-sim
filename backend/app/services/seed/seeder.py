@@ -27,8 +27,23 @@ DEMO_CLIENT_ID = "demo-client-0000"
 
 
 async def is_seeded(db: AsyncSession) -> bool:
-    n = (await db.execute(select(Security))).scalars().first()
-    return n is not None
+    """True only when **all three** seed layers are present.
+
+    Checking just the catalog (the original implementation) lets a
+    partially-failed seed appear "done", which then prevents the missing
+    layer from ever being retried — exactly what bit us on the first Neon
+    deploy (demo scenarios crashed after the catalog had committed). Each
+    underlying seed function is independently idempotent, so erring on the
+    side of "not seeded" is cheap.
+    """
+    has_security = (await db.execute(select(Security).limit(1))).scalar_one_or_none() is not None
+    has_price = (await db.execute(select(HistoricalPrice).limit(1))).scalar_one_or_none() is not None
+    has_demo = (
+        await db.execute(
+            select(Scenario).where(Scenario.client_id == DEMO_CLIENT_ID).limit(1)
+        )
+    ).scalar_one_or_none() is not None
+    return has_security and has_price and has_demo
 
 
 async def seed_catalog(db: AsyncSession) -> dict[str, Security]:
