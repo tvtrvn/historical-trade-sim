@@ -14,6 +14,7 @@ RUN pip install --upgrade pip && pip install -e . --no-deps && pip install \
     sqlalchemy==2.0.35 \
     alembic==1.13.3 \
     asyncpg==0.29.0 \
+    psycopg2-binary==2.9.9 \
     aiosqlite==0.20.0 \
     greenlet==3.1.1 \
     pydantic==2.9.2 \

@@ -6,10 +6,10 @@ Run with: ``pytest -q`` from ``backend/``.
 from __future__ import annotations
 
 from datetime import date, timedelta
-import math
 
 import pytest
 
+from app.db.base import _build_async_engine_args
 from app.services.finance.dates import iter_recurring_dates, nearest_on_or_after
 from app.services.finance.engine import Leg, SimulationInput, simulate
 from app.services.finance.metrics import (
@@ -21,6 +21,44 @@ from app.services.finance.metrics import (
     total_return,
     volatility_annualized,
 )
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DB URL translation — Neon-style URLs must work without manual editing
+# ─────────────────────────────────────────────────────────────────────────────
+
+
+def test_async_engine_args_strips_sslmode_and_sets_ssl_true():
+    url = (
+        "postgresql+asyncpg://u:p@ep-x.aws.neon.tech/db"
+        "?sslmode=require&channel_binding=require"
+    )
+    cleaned, args = _build_async_engine_args(url)
+    assert "sslmode=" not in cleaned
+    assert "channel_binding=" not in cleaned
+    assert args == {"ssl": True}
+
+
+def test_async_engine_args_leaves_non_asyncpg_urls_alone():
+    url = "sqlite+aiosqlite:///./local.db"
+    cleaned, args = _build_async_engine_args(url)
+    assert cleaned == url
+    assert args == {}
+
+
+def test_async_engine_args_no_ssl_when_sslmode_disable():
+    url = "postgresql+asyncpg://u:p@host/db?sslmode=disable"
+    cleaned, args = _build_async_engine_args(url)
+    assert "sslmode=" not in cleaned
+    assert args == {}  # disabled: don't request TLS
+
+
+def test_async_engine_args_preserves_other_query_params():
+    url = "postgresql+asyncpg://u:p@h/db?application_name=hts&sslmode=require"
+    cleaned, args = _build_async_engine_args(url)
+    assert "application_name=hts" in cleaned
+    assert "sslmode" not in cleaned
+    assert args == {"ssl": True}
 
 
 def _line_series(start: date, end: date, start_price: float, daily_growth: float):
