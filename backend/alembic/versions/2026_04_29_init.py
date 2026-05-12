@@ -73,7 +73,9 @@ def upgrade() -> None:
         sa.Column("recurring_amount", sa.Numeric(18, 2), nullable=False, server_default="0"),
         sa.Column("recurring_freq", recurring_freq, nullable=False, server_default="none"),
         sa.Column("fees_pct", sa.Numeric(8, 4), nullable=False, server_default="0"),
-        sa.Column("dividend_reinvest", sa.Boolean(), nullable=False, server_default=sa.text("1")),
+        # `TRUE` works on Postgres 8+ AND SQLite 3.23+ (Python 3.11 ships ≥ 3.40);
+        # `1` is SQLite-only and Postgres rejects it with a type mismatch.
+        sa.Column("dividend_reinvest", sa.Boolean(), nullable=False, server_default=sa.text("TRUE")),
         sa.Column("created_at", sa.DateTime(timezone=True), nullable=False, server_default=sa.func.now()),
     )
     op.create_index("ix_scenarios_client_id", "scenarios", ["client_id"])
