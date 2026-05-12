@@ -8,6 +8,12 @@
    tooltips, raw SVG, etc.) and to make the system inspectable in DevTools.
    ─────────────────────────────────────────────────────────────────────── */
 :root {
+  /* Tell the UA we're a dark theme so native form controls (select, date,
+     time, scrollbar tracks) inherit dark chrome regardless of the OS
+     appearance setting. Without this, macOS light-mode users see a white
+     <select> dropdown with our pale text inside it — illegible. */
+  color-scheme: dark;
+
   --bg-canvas: #070b14;
   --bg-canvas-2: #0a1020;
   --bg-surface: #0e1424;
