@@ -67,7 +67,7 @@ export function ResultsPage() {
   if (isLoading) return <ResultsSkeleton />;
   if (error) {
     return (
-      <div className="max-w-[1280px] mx-auto px-6 mt-8">
+      <div className="max-w-container mx-auto px-6 mt-8">
         <ErrorState error={error} onRetry={() => (isSample ? sampleQ.refetch() : savedQ.refetch())} />
       </div>
     );

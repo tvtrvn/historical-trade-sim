@@ -49,7 +49,7 @@ export function Hero() {
         className="pointer-events-none absolute left-0 right-0 top-[68%] h-px bg-hairline"
       />
 
-      <div className="relative max-w-[1280px] mx-auto px-4 sm:px-6 pt-28 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-28">
+      <div className="relative max-w-container mx-auto px-4 sm:px-6 pt-28 sm:pt-32 lg:pt-40 pb-16 sm:pb-20 lg:pb-28">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 sm:gap-12 items-center">
           <motion.div
             variants={{ hidden: {}, visible: { transition: { staggerChildren: 0.07 } } }}
@@ -57,14 +57,14 @@ export function Hero() {
             animate="visible"
             className="lg:col-span-7"
           >
-            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 h-8 px-3 rounded-full border border-strong bg-bg-surface/60 backdrop-blur-md text-text-secondary text-[12px]">
+            <motion.div variants={fadeUp} className="inline-flex items-center gap-2 h-8 px-3 rounded-full border border-strong bg-bg-surface/60 backdrop-blur-md text-text-secondary text-caption">
               <Sparkles className="w-3.5 h-3.5 text-aurum" />
               <span>{en.landing.eyebrow}</span>
             </motion.div>
 
             <motion.h1
               variants={fadeUp}
-              className="mt-6 font-display tracking-[-0.03em] text-[40px] sm:text-[58px] md:text-[68px] lg:text-[80px] leading-[1.05] text-text-primary"
+              className="mt-6 font-display tracking-display text-display-m sm:text-display-l md:text-display-l lg:text-display-xl leading-[1.05] text-text-primary"
             >
               See how that decision <em className="italic font-display text-aurum/95">could have</em>
               <br className="hidden sm:block" />
@@ -73,7 +73,7 @@ export function Hero() {
 
             <motion.p
               variants={fadeUp}
-              className="mt-5 sm:mt-6 max-w-xl text-text-secondary text-[15px] sm:text-[16.5px] leading-[1.65]"
+              className="mt-5 sm:mt-6 max-w-xl text-text-secondary text-body sm:text-body-l leading-[1.65]"
             >
               {en.landing.sub}
             </motion.p>
@@ -99,7 +99,7 @@ export function Hero() {
 
             <motion.div
               variants={fadeUp}
-              className="mt-7 sm:mt-9 flex flex-wrap items-center gap-x-5 sm:gap-x-6 gap-y-2 text-[12px] text-text-muted"
+              className="mt-7 sm:mt-9 flex flex-wrap items-center gap-x-5 sm:gap-x-6 gap-y-2 text-caption text-text-muted"
             >
               <span className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-positive" />

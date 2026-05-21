@@ -5,7 +5,7 @@ export function Footer() {
   return (
     <footer className="mt-24">
       <HairlineDivider className="opacity-40" />
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-text-muted text-[13px]">
+      <div className="max-w-container mx-auto px-4 sm:px-6 py-8 sm:py-10 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-text-muted text-body-s">
         <div>
           <span className="font-display text-text-secondary">{en.brand}</span>
           <span className="mx-3 opacity-50">·</span>

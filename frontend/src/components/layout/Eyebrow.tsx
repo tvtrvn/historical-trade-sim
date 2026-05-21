@@ -17,7 +17,7 @@ export function Eyebrow({ children, className, tone = 'muted' }: Props) {
   return (
     <span
       className={classNames(
-        'inline-block text-[11px] font-medium uppercase tracking-[0.18em]',
+        'inline-block text-micro font-medium uppercase tracking-eyebrow',
         TONE[tone],
         className,
       )}

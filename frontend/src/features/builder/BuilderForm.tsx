@@ -115,7 +115,7 @@ function Section({ index, title, blurb, summary, open, onToggle, children }: Sec
         <div className="flex items-center gap-3 sm:gap-4 min-w-0">
           <span
             className={classNames(
-              'w-7 h-7 rounded-xs grid place-items-center text-[12px] font-mono shrink-0',
+              'w-7 h-7 rounded-xs grid place-items-center text-caption font-mono shrink-0',
               open
                 ? 'bg-brand/15 text-brand border border-brand/40'
                 : 'bg-bg-surface-2 text-text-muted border border-DEFAULT',
@@ -124,8 +124,8 @@ function Section({ index, title, blurb, summary, open, onToggle, children }: Sec
             {index}
           </span>
           <div className="min-w-0">
-            <div className="text-[14.5px] font-medium tracking-tight text-text-primary">{title}</div>
-            <div className="text-[12.5px] text-text-muted mt-0.5 truncate">
+            <div className="text-body font-medium tracking-tight text-text-primary">{title}</div>
+            <div className="text-body-s text-text-muted mt-0.5 truncate">
               {open && blurb ? blurb : summary}
             </div>
           </div>
@@ -297,7 +297,7 @@ function PositionsFields() {
                 {positions.length > 1 ? (
                   <button
                     onClick={() => removePosition(i)}
-                    className="h-11 w-11 rounded-sm border border-DEFAULT text-text-muted hover:text-negative hover:border-negative transition-colors duration-200 grid place-items-center cursor-pointer"
+                    className="h-11 w-11 rounded-sm border border-DEFAULT text-text-muted hover:text-error hover:border-error transition-colors duration-200 grid place-items-center cursor-pointer"
                     aria-label="Remove position"
                   >
                     <X className="w-4 h-4" />
@@ -313,11 +313,11 @@ function PositionsFields() {
         <>
           <WeightBar positions={positions} />
           <div className="flex items-center justify-between gap-3 flex-wrap">
-            <div className="text-[12.5px] text-text-muted">
+            <div className="text-body-s text-text-muted">
               Total weight:{' '}
               <span className="font-mono text-text-primary tabular">{totalWeight.toFixed(2)}%</span>
               {Math.abs(totalWeight - 100) > 0.01 ? (
-                <span className="ml-2 text-negative">must equal 100%</span>
+                <span className="ml-2 text-error">must equal 100%</span>
               ) : null}
             </div>
             <div className="flex gap-2">

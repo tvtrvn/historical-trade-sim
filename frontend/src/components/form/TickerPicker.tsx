@@ -124,8 +124,8 @@ export function TickerPicker({ value, onChange, placeholder = 'Pick a ticker', i
         }}
         className={classNames(
           'w-full h-12 sm:h-11 rounded-sm bg-bg-surface-2 border flex items-center gap-2 px-3 cursor-pointer',
-          'transition-colors duration-200 text-[14px]',
-          invalid ? 'border-negative' : 'border-DEFAULT hover:border-strong',
+          'transition-colors duration-200 text-body',
+          invalid ? 'border-error' : 'border-DEFAULT hover:border-strong',
           open && 'border-brand',
         )}
         aria-haspopup="listbox"
@@ -174,13 +174,13 @@ export function TickerPicker({ value, onChange, placeholder = 'Pick a ticker', i
                         setActiveIdx(0);
                       }}
                       placeholder="Search by symbol or name..."
-                      className="flex-1 bg-transparent outline-none text-[13.5px] text-text-primary placeholder:text-text-muted font-mono"
+                      className="flex-1 bg-transparent outline-none text-body-s text-text-primary placeholder:text-text-muted font-mono"
                     />
                   </div>
                 </div>
                 <ul role="listbox" className="max-h-72 overflow-y-auto">
                   {items.length === 0 ? (
-                    <li className="px-4 py-6 text-center text-text-muted text-[13px]">
+                    <li className="px-4 py-6 text-center text-text-muted text-body-s">
                       No matches.
                     </li>
                   ) : (
@@ -202,10 +202,10 @@ export function TickerPicker({ value, onChange, placeholder = 'Pick a ticker', i
                       >
                         <TickerChip symbol={s.symbol} />
                         <div className="flex-1 min-w-0">
-                          <div className="text-[13.5px] font-mono text-text-primary">{s.symbol}</div>
-                          <div className="text-[12px] text-text-muted truncate">{s.name}</div>
+                          <div className="text-body-s font-mono text-text-primary">{s.symbol}</div>
+                          <div className="text-caption text-text-muted truncate">{s.name}</div>
                         </div>
-                        <div className="text-[11px] text-text-muted uppercase tracking-wider hidden sm:block">
+                        <div className="text-micro text-text-muted uppercase tracking-wider hidden sm:block">
                           {s.exchange}
                         </div>
                       </li>

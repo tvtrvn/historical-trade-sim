@@ -14,20 +14,20 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT: Record<Variant, string> = {
   primary:
-    'bg-brand text-white hover:bg-brand-hover hover:shadow-cobalt focus-visible:ring-brand',
+    'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-clay focus-visible:ring-brand',
   secondary:
     'bg-transparent text-text-primary border border-strong hover:border-text-secondary hover:bg-bg-surface-2',
   ghost: 'bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
   premium:
     'gradient-border bg-bg-surface text-aurum hover:text-white hover:shadow-aurum',
   danger:
-    'bg-transparent text-negative border border-negative/40 hover:bg-negative/10 hover:border-negative',
+    'bg-transparent text-error border border-error/40 hover:bg-error/10 hover:border-error',
 };
 
 const SIZE: Record<Size, string> = {
-  sm: 'h-8 px-3 text-[13px] rounded-sm',
+  sm: 'h-8 px-3 text-body-s rounded-sm',
   md: 'h-10 px-4 text-sm rounded-sm',
-  lg: 'h-12 px-6 text-[15px] rounded-md',
+  lg: 'h-12 px-6 text-body rounded-md',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(

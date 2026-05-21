@@ -27,22 +27,22 @@ export function ScenarioFloatCard() {
           <div className="flex items-center gap-3">
             <TickerChip symbol="AAPL" size="md" />
             <div>
-              <div className="text-[13px] text-text-secondary">Apple Inc.</div>
-              <div className="font-mono text-[12px] text-text-muted">NASDAQ · AAPL</div>
+              <div className="text-body-s text-text-secondary">Apple Inc.</div>
+              <div className="font-mono text-caption text-text-muted">NASDAQ · AAPL</div>
             </div>
           </div>
           <Eyebrow tone="aurum">Sample · vs SPY</Eyebrow>
         </div>
 
         <div className="mt-6">
-          <div className="text-[12px] text-text-muted">Final value · Apr 2026</div>
+          <div className="text-caption text-text-muted">Final value · Apr 2026</div>
           <div className="mt-2 flex items-baseline gap-3">
-            <span className="font-mono tabular text-text-primary text-[44px] font-medium tracking-tight">
+            <span className="font-mono tabular text-text-primary text-kpi-xl font-medium tracking-tight">
               <AnimatedNumber value={32327} format={(n) => fmt.money(n)} />
             </span>
             <DeltaChip value={223.27} format={(n) => fmt.pct(n)} size="md" />
           </div>
-          <div className="text-[12px] text-text-muted mt-1">From $10,000 invested · Jan 3, 2011</div>
+          <div className="text-caption text-text-muted mt-1">From $10,000 invested · Jan 3, 2011</div>
         </div>
 
         <div className="mt-6 -mx-1">
@@ -61,10 +61,10 @@ export function ScenarioFloatCard() {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="mt-5 pt-4 border-t border-DEFAULT flex items-center justify-between"
         >
-          <span className="text-[11px] uppercase tracking-[0.18em] text-text-muted">
+          <span className="text-micro uppercase tracking-eyebrow text-text-muted">
             Educational · not advice
           </span>
-          <span className="font-mono text-[11px] text-text-muted">
+          <span className="font-mono text-micro text-text-muted">
             holding 15y 3m
           </span>
         </motion.div>
@@ -76,8 +76,8 @@ export function ScenarioFloatCard() {
 function Mini({ label, value, tone }: { label: string; value: string; tone: string }) {
   return (
     <div className="rounded-sm bg-bg-surface-2 border border-DEFAULT p-3">
-      <div className="text-[10.5px] uppercase tracking-[0.16em] text-text-muted">{label}</div>
-      <div className={`mt-1 font-mono tabular text-[14px] ${tone}`}>{value}</div>
+      <div className="text-micro uppercase tracking-eyebrow text-text-muted">{label}</div>
+      <div className={`mt-1 font-mono tabular text-body ${tone}`}>{value}</div>
     </div>
   );
 }

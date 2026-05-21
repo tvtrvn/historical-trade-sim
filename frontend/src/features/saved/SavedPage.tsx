@@ -38,7 +38,7 @@ export function SavedPage() {
 
   return (
     <div>
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+      <div className="max-w-container mx-auto px-4 sm:px-6">
         <PageHeader
           eyebrow="Library"
           title="Saved scenarios"
@@ -88,11 +88,11 @@ export function SavedPage() {
                         <Eyebrow>
                           {s.mode} · vs {s.benchmark_symbol}
                         </Eyebrow>
-                        <span className="text-[11px] text-text-muted">
+                        <span className="text-micro text-text-muted">
                           {fmt.date(s.created_at)}
                         </span>
                       </div>
-                      <h3 className="mt-2 text-[16px] font-semibold tracking-tight text-text-primary line-clamp-2">
+                      <h3 className="mt-2 text-body font-semibold tracking-tight text-text-primary line-clamp-2">
                         {s.name}
                       </h3>
                       <div className="mt-2 flex items-center -space-x-2">
@@ -106,21 +106,21 @@ export function SavedPage() {
                       </div>
                       <div className="mt-4 grid grid-cols-2 gap-2">
                         <div className="rounded-sm bg-bg-surface-2 border border-DEFAULT p-2.5">
-                          <div className="text-[10.5px] uppercase tracking-[0.16em] text-text-muted">
+                          <div className="text-micro uppercase tracking-eyebrow text-text-muted">
                             Final
                           </div>
-                          <div className="mt-1 font-mono tabular text-[13.5px] text-text-primary">
+                          <div className="mt-1 font-mono tabular text-body-s text-text-primary">
                             {s.latest_summary
                               ? fmt.shortMoney(s.latest_summary.final_value)
                               : '—'}
                           </div>
                         </div>
                         <div className="rounded-sm bg-bg-surface-2 border border-DEFAULT p-2.5">
-                          <div className="text-[10.5px] uppercase tracking-[0.16em] text-text-muted">
+                          <div className="text-micro uppercase tracking-eyebrow text-text-muted">
                             Return
                           </div>
                           <div
-                            className={`mt-1 font-mono tabular text-[13.5px] ${
+                            className={`mt-1 font-mono tabular text-body-s ${
                               ret >= 0 ? 'text-positive' : 'text-negative'
                             }`}
                           >
@@ -128,7 +128,7 @@ export function SavedPage() {
                           </div>
                         </div>
                       </div>
-                      <div className="mt-3 text-[11.5px] text-text-muted">
+                      <div className="mt-3 text-caption text-text-muted">
                         {fmt.date(s.start_date)} → {fmt.date(s.end_date)}
                       </div>
                     </Link>

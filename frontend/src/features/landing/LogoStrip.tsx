@@ -12,8 +12,8 @@ export function LogoStrip() {
   return (
     <section className="relative">
       <HairlineDivider className="opacity-40" />
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-10 gap-y-3 text-[11.5px] sm:text-[12px] uppercase tracking-[0.2em] text-text-muted">
-        <span className="text-text-secondary normal-case tracking-normal text-[12.5px] mr-4">
+      <div className="max-w-container mx-auto px-4 sm:px-6 py-6 sm:py-8 flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-10 gap-y-3 text-caption sm:text-caption uppercase tracking-eyebrow text-text-muted">
+        <span className="text-text-secondary normal-case tracking-normal text-body-s mr-4">
           Engineered with
         </span>
         {ITEMS.map((it) => (

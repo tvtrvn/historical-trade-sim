@@ -11,8 +11,8 @@ export function Toggle({ checked, onChange, label, hint }: Props) {
   return (
     <label className="flex items-start justify-between gap-4 cursor-pointer group">
       <div>
-        {label ? <div className="text-[13.5px] text-text-primary">{label}</div> : null}
-        {hint ? <div className="text-[12px] text-text-muted mt-0.5">{hint}</div> : null}
+        {label ? <div className="text-body-s text-text-primary">{label}</div> : null}
+        {hint ? <div className="text-caption text-text-muted mt-0.5">{hint}</div> : null}
       </div>
       <button
         type="button"

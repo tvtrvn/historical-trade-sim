@@ -15,7 +15,7 @@ export function TradeLedgerTable({ trades }: { trades: TradeEvent[] }) {
   if (!trades.length) {
     return (
       <Card>
-        <div className="py-6 text-center text-text-muted text-[13px]">No trades.</div>
+        <div className="py-6 text-center text-text-muted text-body-s">No trades.</div>
       </Card>
     );
   }
@@ -23,9 +23,9 @@ export function TradeLedgerTable({ trades }: { trades: TradeEvent[] }) {
   return (
     <Card padded={false} className="overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-[13.5px]">
+        <table className="w-full text-body-s">
           <thead>
-            <tr className="text-text-muted text-[11px] uppercase tracking-[0.14em] border-b border-DEFAULT">
+            <tr className="text-text-muted text-micro uppercase tracking-eyebrow border-b border-DEFAULT">
               <Th>Date</Th>
               <Th>Symbol</Th>
               <Th right>Price</Th>
@@ -58,7 +58,7 @@ export function TradeLedgerTable({ trades }: { trades: TradeEvent[] }) {
                 </Td>
                 <Td>
                   <span
-                    className={`inline-flex items-center px-2 h-6 rounded-xs text-[11px] font-medium uppercase tracking-wider ${
+                    className={`inline-flex items-center px-2 h-6 rounded-xs text-micro font-medium uppercase tracking-wider ${
                       t.kind === 'initial'
                         ? 'bg-aurum/15 text-aurum'
                         : 'bg-brand/15 text-brand'
@@ -73,7 +73,7 @@ export function TradeLedgerTable({ trades }: { trades: TradeEvent[] }) {
         </table>
       </div>
       {totalPages > 1 ? (
-        <div className="flex items-center justify-between px-5 py-3 border-t border-DEFAULT text-[12px] text-text-muted">
+        <div className="flex items-center justify-between px-5 py-3 border-t border-DEFAULT text-caption text-text-muted">
           <span>
             {page * PAGE + 1}–{Math.min((page + 1) * PAGE, trades.length)} of {trades.length}
           </span>

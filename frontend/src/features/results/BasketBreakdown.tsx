@@ -20,7 +20,7 @@ export function BasketBreakdown({ contributions }: { contributions: PositionCont
   return (
     <Card padded>
       <Eyebrow tone="aurum">Position breakdown</Eyebrow>
-      <h3 className="mt-2 text-[18px] font-semibold tracking-tight text-text-primary mb-4">
+      <h3 className="mt-2 text-h3 font-semibold tracking-tight text-text-primary mb-4">
         Who drove the result
       </h3>
       <div className="space-y-3">
@@ -34,17 +34,17 @@ export function BasketBreakdown({ contributions }: { contributions: PositionCont
                 />
                 <TickerChip symbol={c.symbol} />
                 <div className="min-w-0">
-                  <div className="font-mono text-[13.5px] text-text-primary">{c.symbol}</div>
-                  <div className="text-[11.5px] text-text-muted">
+                  <div className="font-mono text-body-s text-text-primary">{c.symbol}</div>
+                  <div className="text-caption text-text-muted">
                     weight {Number(c.weight_pct).toFixed(1)}%
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-mono tabular text-[13.5px] text-text-primary">
+                <div className="font-mono tabular text-body-s text-text-primary">
                   {fmt.money(c.final_value)}
                 </div>
-                <div className="text-[11.5px] text-text-muted">
+                <div className="text-caption text-text-muted">
                   invested {fmt.shortMoney(c.invested)}
                 </div>
               </div>
@@ -59,7 +59,7 @@ export function BasketBreakdown({ contributions }: { contributions: PositionCont
                 }}
               />
             </div>
-            <div className="mt-1.5 flex items-center justify-between text-[11px] text-text-muted">
+            <div className="mt-1.5 flex items-center justify-between text-micro text-text-muted">
               <span>contribution</span>
               <span className="font-mono">{Number(c.contribution_pct).toFixed(2)}%</span>
             </div>

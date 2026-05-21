@@ -69,7 +69,7 @@ export function ResultsView({ scenario, isSample }: Props) {
     <div>
       <ResultsTitleStrip scenario={scenario} isSample={isSample} />
 
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 pb-10">
+      <div className="max-w-container mx-auto px-4 sm:px-6 pb-10">
         {/* Plain-English “how to read this page” callout */}
         <Card padded variant="glass" className="mt-4 sm:mt-6">
           <div className="flex items-start gap-4">
@@ -77,10 +77,10 @@ export function ResultsView({ scenario, isSample }: Props) {
               <Compass className="w-4 h-4" strokeWidth={1.6} />
             </div>
             <div className="min-w-0">
-              <h2 className="font-display text-[17px] sm:text-[19px] tracking-tight text-text-primary">
+              <h2 className="font-display text-body-l sm:text-h3 tracking-tight text-text-primary">
                 {en.results.explainerCallout.title}
               </h2>
-              <p className="mt-1.5 text-text-secondary text-[14px] leading-relaxed">
+              <p className="mt-1.5 text-text-secondary text-body leading-relaxed">
                 {en.results.explainerCallout.body}
               </p>
             </div>
@@ -222,7 +222,7 @@ export function ResultsView({ scenario, isSample }: Props) {
           <ChartFrame
             eyebrow={en.results.eyebrowAnnual}
             title="Annual returns"
-            description={`Portfolio (color-coded) vs ${benchSymbol} (lavender).`}
+            description={`Portfolio (color-coded) vs ${benchSymbol} (caramel).`}
             height={300}
             explain={X.annualChart}
           >
@@ -254,7 +254,7 @@ export function ResultsView({ scenario, isSample }: Props) {
           <h3 className="mt-2 font-display text-2xl tracking-tight text-text-primary">
             Trade ledger
           </h3>
-          <p className="mt-1 text-text-secondary text-[14px]">
+          <p className="mt-1 text-text-secondary text-body">
             Every buy event the engine executed — including each recurring contribution.
           </p>
           <div className="mt-4">
@@ -263,12 +263,12 @@ export function ResultsView({ scenario, isSample }: Props) {
         </div>
 
         <div className="mt-12 mb-2 rounded-md bg-bg-surface-2 border border-DEFAULT p-5 flex items-center justify-between gap-4 flex-wrap">
-          <div className="text-[12.5px] text-text-muted">
+          <div className="text-body-s text-text-muted">
             {en.disclaimer} Math reference and full definitions live on the methodology page.
           </div>
           <Link
             to="/methodology"
-            className="inline-flex items-center gap-1.5 text-aurum hover:text-white transition-colors text-[13px] cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-aurum hover:text-white transition-colors text-body-s cursor-pointer"
           >
             Open methodology
             <ArrowRight className="w-3.5 h-3.5" />

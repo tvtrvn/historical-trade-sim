@@ -17,7 +17,7 @@ export function EmptyState({ icon, title, body, action }: Props) {
         </div>
       ) : null}
       <h3 className="font-display text-2xl tracking-tight text-text-primary">{title}</h3>
-      <p className="mt-2 text-text-secondary text-[14px]">{body}</p>
+      <p className="mt-2 text-text-secondary text-body">{body}</p>
       {action ? <div className="mt-5 flex justify-center">{action}</div> : null}
     </Card>
   );

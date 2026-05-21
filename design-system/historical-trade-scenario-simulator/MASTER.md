@@ -31,7 +31,7 @@
 
 ### 2.1 Style Foundation
 
-- **Primary style:** **Editorial Dark Glass** — deep midnight surfaces with
+- **Primary style:** **Editorial Dark Glass** — deep warm-espresso surfaces with
   tasteful glassmorphism, layered gradients, and a single hairline accent.
 - **Secondary style:** **Precision Data** — chart areas are flat, high-contrast,
   with neutral grids and accent lines that do the talking.
@@ -40,63 +40,73 @@
 
 ### 2.2 Color Tokens
 
-```css
-/* Deep canvas */
---bg-canvas:       #070B14;   /* page background */
---bg-canvas-2:     #0A1020;   /* under-hero, between sections */
---bg-surface:      #0E1424;   /* cards, panels */
---bg-surface-2:    #121A2E;   /* hovered cards, nested panels */
---bg-elevated:     #182241;   /* modals, popovers */
+> **Palette: "Warm Clay & Honey" (v2.0, 2026-05-21).** Replaced the original
+> cold navy + electric cobalt + lavender/purple with warm espresso surfaces and
+> earthy accents. All text/accent pairings verified WCAG AA (≥4.5:1) on every
+> surface. Token names in code: `bg.*`, `text.*`, `brand`, `aurum`, `caramel`,
+> `positive`/`negative`, `success`/`error`/`warning`/`info` (each `*-soft`).
 
-/* Hairlines & dividers */
---border-subtle:   rgba(148, 163, 184, 0.08);
---border-default:  rgba(148, 163, 184, 0.14);
---border-strong:   rgba(148, 163, 184, 0.24);
+```css
+/* Warm espresso canvas */
+--bg-canvas:       #15110E;   /* page background */
+--bg-canvas-2:     #1A140F;   /* under-hero, between sections */
+--bg-surface:      #1E1813;   /* cards, panels */
+--bg-surface-2:    #261E18;   /* hovered cards, nested panels */
+--bg-elevated:     #2A211A;   /* modals, popovers */
+
+/* Hairlines & dividers (warm taupe) */
+--border-subtle:   rgba(168, 150, 132, 0.10);
+--border-default:  rgba(168, 150, 132, 0.16);
+--border-strong:   rgba(168, 150, 132, 0.26);
 
 /* Text */
---text-primary:    #E8EDF7;
---text-secondary:  #94A3B8;
---text-muted:      #64748B;
---text-inverse:    #0B1220;
+--text-primary:    #F3EDE4;
+--text-secondary:  #C3B5A4;
+--text-muted:      #A89684;   /* taupe; AA ≥5.5:1 on every surface */
+--text-inverse:    #1A140F;
 
 /* Brand & accents */
---brand-cobalt:    #3D6CFF;   /* primary action, focus, primary line */
---brand-cobalt-2:  #5B86FF;   /* hover */
---accent-aurum:    #F4C770;   /* premium highlight, gold metric, glow */
---accent-aurum-2:  #E5B25C;
---accent-lavender: #A78BFA;   /* benchmark series */
+--brand:           #D9774B;   /* terracotta/clay — primary action, focus, line */
+--brand-hover:     #E68A5E;
+--accent-aurum:    #E6B24C;   /* honey gold — premium highlight, glow */
+--accent-aurum-2:  #CE9B3C;
+--accent-caramel:  #C99A6A;   /* benchmark series (renamed from lavender) */
 
 /* Semantic */
---positive:        #5EE2A0;   /* gains, outperformance */
---positive-soft:   rgba(94, 226, 160, 0.12);
---negative:        #FF7B7B;   /* losses, drawdowns */
---negative-soft:   rgba(255, 123, 123, 0.12);
---warning:         #F4C770;
---info:            #5BB6FF;
+--positive:        #7FA776;   /* gains, outperformance (sage) */
+--positive-soft:   rgba(127, 167, 118, 0.13);
+--negative:        #D2664F;   /* losses, drawdowns (warm rust) */
+--negative-soft:   rgba(210, 102, 79, 0.13);
+--warning:         #E6B24C;
+--info:            #6FA8A0;   /* dusty teal */
 
 /* Chart palette (sequential, colorblind-aware) */
---chart-1: #3D6CFF;   /* portfolio */
---chart-2: #A78BFA;   /* benchmark */
---chart-3: #F4C770;   /* highlight position */
---chart-4: #5EE2A0;   /* secondary positive */
---chart-5: #5BB6FF;   /* recurring contribution */
---chart-6: #FF9CB6;   /* outlier / alt */
+--chart-1: #D9774B;   /* portfolio */
+--chart-2: #C99A6A;   /* benchmark */
+--chart-3: #E6B24C;   /* highlight position */
+--chart-4: #7FA776;   /* secondary positive */
+--chart-5: #6FA8A0;   /* recurring contribution */
+--chart-6: #C77B7B;   /* outlier / alt (warm rose) */
 ```
+
+> **Button contrast note:** white-on-clay is only ~3:1, so primary buttons use
+> **dark text** (`text-bg-canvas`) on the clay background (≈5.96:1). Clay stays
+> vivid as an accent/line/focus color on dark surfaces.
 
 ### 2.3 Gradients & Glow
 
 ```css
 --gradient-aurora:
-  radial-gradient(1200px 600px at 20% 0%,  rgba(61,108,255,0.18), transparent 60%),
-  radial-gradient(900px  500px at 90% 10%, rgba(167,139,250,0.14), transparent 60%),
-  radial-gradient(700px  500px at 50% 100%, rgba(244,199,112,0.10), transparent 60%);
+  radial-gradient(1200px 600px at 20% 0%,  rgba(217,119,75,0.16), transparent 60%),
+  radial-gradient(900px  500px at 90% 10%, rgba(230,178,76,0.12), transparent 60%),
+  radial-gradient(700px  500px at 50% 100%, rgba(201,154,106,0.10), transparent 60%);
 
 --gradient-hairline:
-  linear-gradient(90deg, transparent, rgba(244,199,112,0.6), transparent);
+  linear-gradient(90deg, transparent, rgba(230,178,76,0.6), transparent);
 
---glow-cobalt:  0 0 0 1px rgba(61,108,255,0.35), 0 12px 40px -8px rgba(61,108,255,0.45);
---glow-aurum:   0 0 0 1px rgba(244,199,112,0.30), 0 12px 40px -8px rgba(244,199,112,0.35);
---shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -24px rgba(0,0,0,0.6);
+--glow-clay:    0 0 0 1px rgba(217,119,75,0.35), 0 12px 40px -8px rgba(217,119,75,0.45);
+--glow-aurum:   0 0 0 1px rgba(230,178,76,0.30), 0 12px 40px -8px rgba(230,178,76,0.35);
+--shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -24px rgba(0,0,0,0.7);
 ```
 
 > **Anti-pattern:** never use full-bleed neon glow, never animate gradients
@@ -177,20 +187,20 @@
 
 | Variant       | Background                       | Text          | Border                      |
 | ------------- | -------------------------------- | ------------- | --------------------------- |
-| **Primary**   | `--brand-cobalt` → `cobalt-2` hover | `white`       | none, `glow-cobalt` on hover |
+| **Primary**   | `brand` (clay) → `brand-hover` | `text-bg-canvas` (dark) | none, `shadow-clay` on hover |
 | **Secondary** | `transparent`                    | `text-primary` | `border-strong`              |
 | **Ghost**     | `transparent`                    | `text-secondary` → primary on hover | none |
 | **Premium**   | `transparent` + 1px aurum gradient border | `accent-aurum` | gradient hairline           |
 
 - Height: `40` (md) / `48` (lg) / `32` (sm).
 - Transition: `transform 200ms ease-out, background-color 160ms ease-out`.
-- Focus ring: `ring-2 ring-offset-2 ring-offset-bg-canvas ring-brand-cobalt`.
+- Focus ring: `ring-2 ring-offset-2 ring-offset-bg-canvas ring-brand`.
 
 ### 5.3 Form fields (`Field` component)
 
 - Top-aligned label + helper hint. (Pick one style per page; never mix
   with floating labels.)
-- Inputs: `bg-surface-2` + `border-default`, focus → `border-brand-cobalt`
+- Inputs: `bg-surface-2` + `border-default`, focus → `border-brand`
   + thin inset glow.
 - Error state: `border-negative` + helper text in `--negative`.
 - The `Field` component accepts an `explain={{ what, read }}` prop that

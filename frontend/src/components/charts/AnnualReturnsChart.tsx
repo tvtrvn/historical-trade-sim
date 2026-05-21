@@ -37,7 +37,7 @@ export function AnnualReturnsChart({ metrics }: Props) {
           width={48}
         />
         <Tooltip
-          cursor={{ fill: 'rgba(148,163,184,0.06)' }}
+          cursor={{ fill: 'rgba(168,150,132,0.06)' }}
           content={<ChartTooltip showDate={false} formatter={(n) => `${n.toFixed(2)}%`} />}
         />
         <Bar dataKey="Portfolio" radius={[4, 4, 0, 0]} maxBarSize={28}>
@@ -45,7 +45,7 @@ export function AnnualReturnsChart({ metrics }: Props) {
             <Cell key={i} fill={d.Portfolio >= 0 ? 'var(--positive)' : 'var(--negative)'} />
           ))}
         </Bar>
-        <Bar dataKey="Benchmark" radius={[4, 4, 0, 0]} maxBarSize={28} fill="var(--lavender)" opacity={0.55} />
+        <Bar dataKey="Benchmark" radius={[4, 4, 0, 0]} maxBarSize={28} fill="var(--caramel)" opacity={0.55} />
       </BarChart>
     </ResponsiveContainer>
   );

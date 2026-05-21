@@ -41,7 +41,7 @@ const SAMPLES: Sample[] = [
     metricColor: 'text-positive',
     vs: '−24pp vs QQQ',
     spark: [100, 102, 105, 110, 113, 118, 121, 126, 132, 138, 142, 150, 158, 168],
-    sparkColor: 'var(--lavender)',
+    sparkColor: 'var(--caramel)',
   },
   {
     id: 'sample-3',
@@ -69,14 +69,14 @@ const SAMPLES: Sample[] = [
 
 export function SampleScenarios() {
   return (
-    <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-16">
+    <section className="max-w-container mx-auto px-4 sm:px-6 py-16">
       <div className="flex items-end justify-between gap-6 mb-8">
         <div>
           <Eyebrow tone="aurum">{en.landing.samples.title}</Eyebrow>
-          <h2 className="mt-3 font-display text-[32px] sm:text-4xl tracking-tight text-text-primary">
+          <h2 className="mt-3 font-display text-h2 sm:text-4xl tracking-tight text-text-primary">
             One click into a real story.
           </h2>
-          <p className="mt-3 text-text-secondary text-[15px]">{en.landing.samples.subtitle}</p>
+          <p className="mt-3 text-text-secondary text-body">{en.landing.samples.subtitle}</p>
         </div>
       </div>
 
@@ -103,18 +103,18 @@ export function SampleScenarios() {
                   <ArrowUpRight className="w-4 h-4 text-text-muted group-hover:text-text-primary transition-colors" />
                 </div>
                 <div className="mt-4">
-                  <h3 className="text-[15.5px] font-semibold tracking-tight text-text-primary">
+                  <h3 className="text-body font-semibold tracking-tight text-text-primary">
                     {s.title}
                   </h3>
-                  <p className="mt-1 text-[12.5px] text-text-muted">{s.subtitle}</p>
+                  <p className="mt-1 text-body-s text-text-muted">{s.subtitle}</p>
                 </div>
               </div>
               <div className="px-5">
                 <Sparkline values={s.spark} color={s.sparkColor} height={56} />
               </div>
               <div className="px-5 pb-5 pt-2 flex items-center justify-between">
-                <span className={`font-mono tabular text-[14px] ${s.metricColor}`}>{s.metric}</span>
-                <span className="text-[11.5px] text-text-muted">{s.vs}</span>
+                <span className={`font-mono tabular text-body ${s.metricColor}`}>{s.metric}</span>
+                <span className="text-caption text-text-muted">{s.vs}</span>
               </div>
             </Link>
           </motion.div>
