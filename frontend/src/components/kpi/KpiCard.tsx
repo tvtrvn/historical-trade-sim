@@ -51,7 +51,7 @@ export function KpiCard({
       <div
         className={classNames(
           'mt-3 font-mono tabular tracking-tight text-text-primary',
-          size === 'lg' ? 'text-[34px] sm:text-[42px] leading-[44px] font-medium' : 'text-[26px] sm:text-[28px] leading-[32px] font-medium',
+          size === 'lg' ? 'text-kpi sm:text-kpi-xl leading-[44px] font-medium' : 'text-kpi sm:text-kpi font-medium',
         )}
       >
         <AnimatedNumber value={value} format={format} />
@@ -61,10 +61,10 @@ export function KpiCard({
           <DeltaChip value={delta.value} format={delta.format} invert={delta.invert} />
         ) : null}
         {asOf ? (
-          <span className="text-[11px] text-text-muted">as of {asOf}</span>
+          <span className="text-micro text-text-muted">as of {asOf}</span>
         ) : null}
       </div>
-      {footnote ? <div className="mt-2 text-[12px] text-text-muted">{footnote}</div> : null}
+      {footnote ? <div className="mt-2 text-caption text-text-muted">{footnote}</div> : null}
       {trail ? <div className="absolute bottom-0 left-0 right-0 h-10">{trail}</div> : null}
     </motion.div>
   );

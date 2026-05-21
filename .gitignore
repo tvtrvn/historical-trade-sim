@@ -14,3 +14,10 @@ dist
 local.db
 local.db-journal
 *.tsbuildinfo
+.gitnexus
+
+# Local tooling / docs — keep out of the repo
+.claude/
+AGENTS.md
+CLAUDE.md
+walkthrough.md

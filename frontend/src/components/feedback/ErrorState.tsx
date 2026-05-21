@@ -12,16 +12,16 @@ export function ErrorState({ error, onRetry }: Props) {
   const apiErr = error instanceof ApiClientError ? error : null;
   return (
     <Card className="text-center" padded>
-      <div className="w-12 h-12 mx-auto mb-4 rounded-md bg-negative/10 text-negative grid place-items-center">
+      <div className="w-12 h-12 mx-auto mb-4 rounded-md bg-error/10 text-error grid place-items-center">
         <AlertTriangle className="w-5 h-5" strokeWidth={1.75} />
       </div>
       {apiErr ? (
-        <div className="inline-block px-2.5 py-1 rounded-xs bg-bg-surface-2 text-[11px] font-mono text-text-muted mb-3">
+        <div className="inline-block px-2.5 py-1 rounded-xs bg-bg-surface-2 text-micro font-mono text-text-muted mb-3">
           {apiErr.code}
         </div>
       ) : null}
       <h3 className="font-display text-xl tracking-tight text-text-primary">Something didn't compute</h3>
-      <p className="mt-2 text-text-secondary text-[14px] max-w-md mx-auto">
+      <p className="mt-2 text-text-secondary text-body max-w-md mx-auto">
         {apiErr?.message ?? (error instanceof Error ? error.message : 'Unexpected error')}
       </p>
       {onRetry ? (

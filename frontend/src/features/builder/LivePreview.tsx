@@ -64,7 +64,7 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
       <div className="flex items-center justify-between">
         <Eyebrow tone="aurum">{en.builder.livePreview.title}</Eyebrow>
         {isFetching ? (
-          <span className="text-[11px] text-text-muted flex items-center gap-1.5">
+          <span className="text-micro text-text-muted flex items-center gap-1.5">
             <span className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
             Computing...
           </span>
@@ -72,8 +72,8 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
       </div>
 
       {errors.length > 0 ? (
-        <div className="mt-6 rounded-sm bg-negative/10 border border-negative/30 p-4 text-[13px] text-text-secondary">
-          <div className="font-medium text-negative mb-1">Fix to run:</div>
+        <div className="mt-6 rounded-sm bg-error/10 border border-error/30 p-4 text-body-s text-text-secondary">
+          <div className="font-medium text-error mb-1">Fix to run:</div>
           <ul className="list-disc list-inside space-y-1">
             {errors.map((e) => (
               <li key={e}>{e}</li>
@@ -81,17 +81,17 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
           </ul>
         </div>
       ) : !data ? (
-        <div className="mt-8 text-center text-text-muted text-[13px] py-10">
+        <div className="mt-8 text-center text-text-muted text-body-s py-10">
           {en.builder.livePreview.empty}
         </div>
       ) : (
         <>
           <div className="mt-5">
-            <div className="text-[12px] text-text-muted">
+            <div className="text-caption text-text-muted">
               Final value · as of {fmt.date(state.end_date)}
             </div>
             <div className="mt-2 flex items-baseline gap-3 flex-wrap">
-              <span className="font-mono tabular text-text-primary text-[40px] font-medium tracking-tight">
+              <span className="font-mono tabular text-text-primary text-kpi-xl font-medium tracking-tight">
                 <AnimatedNumber value={final} format={(n) => fmt.money(n)} />
               </span>
               <DeltaChip value={delta} format={(n) => fmt.pct(n)} size="md" />
@@ -110,7 +110,7 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
             <Mini label={`vs ${state.benchmark_symbol}`} value={`${rel >= 0 ? '+' : ''}${rel.toFixed(1)}pp`} tone={rel >= 0 ? 'text-aurum' : 'text-text-secondary'} />
           </div>
 
-          <div className="mt-5 text-[11px] text-text-muted">
+          <div className="mt-5 text-micro text-text-muted">
             {en.builder.livePreview.hint}
           </div>
         </>
@@ -130,7 +130,7 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
       </div>
 
       {(apiErr || previewApiErr) && (
-        <div className="mt-3 text-[12px] text-negative">
+        <div className="mt-3 text-caption text-error">
           {(apiErr ?? previewApiErr)?.message}
         </div>
       )}
@@ -141,8 +141,8 @@ export function LivePreview({ errors, onRun, running, error }: Props) {
 function Mini({ label, value, tone }: { label: string; value: string; tone: string }) {
   return (
     <div className="rounded-sm bg-bg-surface-2 border border-DEFAULT p-3">
-      <div className="text-[10.5px] uppercase tracking-[0.16em] text-text-muted">{label}</div>
-      <div className={`mt-1 font-mono tabular text-[13.5px] ${tone}`}>{value}</div>
+      <div className="text-micro uppercase tracking-eyebrow text-text-muted">{label}</div>
+      <div className={`mt-1 font-mono tabular text-body-s ${tone}`}>{value}</div>
     </div>
   );
 }

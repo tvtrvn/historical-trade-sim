@@ -10,7 +10,7 @@ export function PlainEnglishExplainer() {
     <section className="relative">
       {/* Soft horizon hairline */}
       <div className="absolute left-0 right-0 top-0 h-px bg-hairline" aria-hidden />
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-16 sm:py-20">
+      <div className="max-w-container mx-auto px-4 sm:px-6 py-16 sm:py-20">
         {/* "What is this?" callout */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
@@ -25,10 +25,10 @@ export function PlainEnglishExplainer() {
             </div>
             <div className="flex-1 min-w-0">
               <Eyebrow tone="aurum">{en.landing.plain.eyebrow}</Eyebrow>
-              <h2 className="mt-2 font-display text-[24px] sm:text-[28px] tracking-tight text-text-primary leading-[1.18]">
+              <h2 className="mt-2 font-display text-h3 sm:text-h2 tracking-tight text-text-primary leading-[1.18]">
                 {en.landing.plain.title}
               </h2>
-              <p className="mt-3 text-text-secondary text-[15px] leading-relaxed max-w-2xl">
+              <p className="mt-3 text-text-secondary text-body leading-relaxed max-w-2xl">
                 {en.landing.plain.body}
               </p>
             </div>
@@ -41,10 +41,10 @@ export function PlainEnglishExplainer() {
             <BookOpen className="w-4 h-4 text-aurum" strokeWidth={1.6} />
             <Eyebrow tone="aurum">{en.landing.glossary.eyebrow}</Eyebrow>
           </div>
-          <h3 className="mt-3 font-display text-[28px] sm:text-[32px] tracking-tight text-text-primary">
+          <h3 className="mt-3 font-display text-h2 sm:text-h2 tracking-tight text-text-primary">
             {en.landing.glossary.title}
           </h3>
-          <p className="mt-2 text-text-secondary text-[14.5px] leading-relaxed">
+          <p className="mt-2 text-text-secondary text-body leading-relaxed">
             {en.landing.glossary.sub}
           </p>
         </div>
@@ -63,13 +63,13 @@ export function PlainEnglishExplainer() {
               className="rounded-md bg-bg-surface border border-DEFAULT shadow-card p-5 sm:p-6 transition-[border-color] duration-200 hover:border-strong"
             >
               <div className="flex items-start justify-between gap-3">
-                <h4 className="text-[16px] font-semibold tracking-tight text-text-primary">
+                <h4 className="text-body font-semibold tracking-tight text-text-primary">
                   {t.term}
                 </h4>
               </div>
-              <p className="mt-2 text-text-secondary text-[14px] leading-relaxed">{t.plain}</p>
-              <div className="mt-3 pt-3 border-t border-DEFAULT flex items-start gap-2 text-[12.5px] text-text-muted leading-relaxed">
-                <span className="text-aurum font-medium uppercase tracking-[0.14em] text-[10.5px] mt-[2px]">
+              <p className="mt-2 text-text-secondary text-body leading-relaxed">{t.plain}</p>
+              <div className="mt-3 pt-3 border-t border-DEFAULT flex items-start gap-2 text-body-s text-text-muted leading-relaxed">
+                <span className="text-aurum font-medium uppercase tracking-eyebrow text-micro mt-[2px]">
                   Why
                 </span>
                 <span>{t.why}</span>

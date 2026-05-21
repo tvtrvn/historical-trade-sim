@@ -13,7 +13,7 @@ interface Props {
 }
 
 const VARIANT = {
-  primary: 'bg-brand text-white hover:bg-brand-hover hover:shadow-cobalt',
+  primary: 'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-clay',
   secondary:
     'bg-transparent text-text-primary border border-strong hover:border-text-secondary hover:bg-bg-surface-2',
   ghost: 'bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
@@ -21,9 +21,9 @@ const VARIANT = {
 };
 
 const SIZE = {
-  sm: 'h-8 px-3 text-[13px] rounded-sm',
+  sm: 'h-8 px-3 text-body-s rounded-sm',
   md: 'h-10 px-4 text-sm rounded-sm',
-  lg: 'h-12 px-6 text-[15px] rounded-md',
+  lg: 'h-12 px-6 text-body rounded-md',
 };
 
 export function LinkButton({

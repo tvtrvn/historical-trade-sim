@@ -30,7 +30,7 @@ export function BuilderPage() {
   }, [state.name]);
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+    <div className="max-w-container mx-auto px-4 sm:px-6">
       <PageHeader
         eyebrow={en.builder.eyebrow}
         title={en.builder.title}
@@ -43,13 +43,13 @@ export function BuilderPage() {
             <Sparkles className="w-4 h-4" strokeWidth={1.6} />
           </div>
           <div className="min-w-0">
-            <h2 className="font-display text-[18px] sm:text-[20px] tracking-tight text-text-primary">
+            <h2 className="font-display text-h3 sm:text-h3 tracking-tight text-text-primary">
               {en.builder.intro.title}
             </h2>
-            <p className="mt-1.5 text-text-secondary text-[14px] leading-relaxed">
+            <p className="mt-1.5 text-text-secondary text-body leading-relaxed">
               {en.builder.intro.body}
             </p>
-            <div className="mt-3 hidden sm:flex items-center gap-2 text-[12px] text-text-muted">
+            <div className="mt-3 hidden sm:flex items-center gap-2 text-caption text-text-muted">
               <span className="px-2 h-6 rounded-xs bg-bg-surface-2 border border-DEFAULT inline-flex items-center">
                 Tip
               </span>

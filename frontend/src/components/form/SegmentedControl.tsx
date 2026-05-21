@@ -38,7 +38,7 @@ export function SegmentedControl<T extends string>({
       <motion.div
         layout
         transition={{ type: 'spring', stiffness: 280, damping: 28 }}
-        className="absolute top-1 bottom-1 rounded-[6px] bg-brand/15 border border-brand/30"
+        className="absolute top-1 bottom-1 rounded-xs bg-brand/15 border border-brand/30"
         style={{ width: `calc(${segWidth}% - 8px)`, left: `calc(${segWidth * idx}% + 4px)` }}
       />
       {items.map((it) => (
@@ -48,7 +48,7 @@ export function SegmentedControl<T extends string>({
           aria-selected={value === it.value}
           onClick={() => onChange(it.value)}
           className={classNames(
-            'relative z-10 flex-1 px-3 text-[13px] font-medium tracking-tight rounded-[6px] cursor-pointer',
+            'relative z-10 flex-1 px-3 text-body-s font-medium tracking-tight rounded-xs cursor-pointer',
             'transition-colors duration-200',
             value === it.value ? 'text-text-primary' : 'text-text-secondary hover:text-text-primary',
           )}

@@ -2,7 +2,7 @@ import { Skeleton } from '@/components/feedback/Skeleton';
 
 export function ResultsSkeleton() {
   return (
-    <div className="max-w-[1280px] mx-auto px-6">
+    <div className="max-w-container mx-auto px-6">
       <div className="mt-6 mb-10">
         <Skeleton width="40%" height={20} />
         <div className="mt-4">

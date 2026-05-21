@@ -9,13 +9,13 @@ const ICONS = [Sparkles, Layers, ScaleIcon, LineChart, BookOpen];
 
 export function ValueProps() {
   return (
-    <section className="max-w-[1280px] mx-auto px-4 sm:px-6 py-16 sm:py-24">
+    <section className="max-w-container mx-auto px-4 sm:px-6 py-16 sm:py-24">
       <div className="max-w-3xl mb-10 sm:mb-12">
         <Eyebrow tone="aurum">What's in the box</Eyebrow>
-        <h2 className="mt-3 font-display text-[32px] sm:text-4xl tracking-tight text-text-primary">
+        <h2 className="mt-3 font-display text-h2 sm:text-4xl tracking-tight text-text-primary">
           Built for stories, not toy calculators.
         </h2>
-        <p className="mt-3 text-text-secondary text-[15px] sm:text-[15.5px] leading-relaxed">
+        <p className="mt-3 text-text-secondary text-body sm:text-body-l leading-relaxed">
           Every metric is unit-tested, every chart links to a definition, and every result
           carries the date it was computed on.
         </p>
@@ -55,10 +55,10 @@ export function ValueProps() {
                   <Icon className="w-5 h-5" strokeWidth={1.5} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[17px] font-semibold tracking-tight text-text-primary">
+                  <h3 className="text-body-l font-semibold tracking-tight text-text-primary">
                     {vp.title}
                   </h3>
-                  <p className="mt-2 text-text-secondary text-[14px] leading-relaxed">{vp.body}</p>
+                  <p className="mt-2 text-text-secondary text-body leading-relaxed">{vp.body}</p>
                 </div>
               </div>
               {premium ? <PremiumDecor /> : null}

@@ -102,13 +102,13 @@ export function ResultsTitleStrip({ scenario, isSample }: Props) {
 
   return (
     <div className="sticky top-20 z-30 backdrop-blur-md bg-bg-canvas/80 border-b border-subtle">
-      <div className="max-w-[1280px] mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-start justify-between gap-4 flex-wrap">
+      <div className="max-w-container mx-auto px-4 sm:px-6 py-4 sm:py-5 flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
           <Eyebrow tone="aurum">
             {scenario.mode === 'basket' ? 'Basket' : 'Single'} · vs {scenario.benchmark_symbol}
           </Eyebrow>
           <div className="mt-2">
-            <h1 className="font-display text-[26px] sm:text-3xl md:text-4xl tracking-tight text-text-primary truncate">
+            <h1 className="font-display text-h2 sm:text-3xl md:text-4xl tracking-tight text-text-primary truncate">
               {scenario.name}
             </h1>
           </div>
@@ -118,10 +118,10 @@ export function ResultsTitleStrip({ scenario, isSample }: Props) {
                 <TickerChip key={p.symbol} symbol={p.symbol} className="ring-2 ring-bg-canvas" />
               ))}
             </div>
-            <span className="text-text-muted text-[12.5px]">
+            <span className="text-text-muted text-body-s">
               {fmt.date(scenario.start_date)} → {fmt.date(scenario.end_date)}
             </span>
-            <span className="text-text-muted text-[12.5px] hidden sm:inline">
+            <span className="text-text-muted text-body-s hidden sm:inline">
               ·{' '}
               {Number(scenario.recurring_amount) > 0
                 ? `${fmt.shortMoney(scenario.recurring_amount)} ${scenario.recurring_freq}`
@@ -288,10 +288,10 @@ function MenuItem({
       type="button"
       onClick={onClick}
       className={classNames(
-        'w-full flex items-center gap-2 px-3 h-9 text-[13.5px] text-left cursor-pointer',
-        'transition-colors duration-150',
+        'w-full flex items-center gap-2 px-3 h-9 text-body-s text-left cursor-pointer',
+        'transition-colors duration-200',
         danger
-          ? 'text-negative hover:bg-negative/10'
+          ? 'text-error hover:bg-error/10'
           : 'text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
       )}
     >

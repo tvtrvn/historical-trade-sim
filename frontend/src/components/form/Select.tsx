@@ -17,7 +17,7 @@ export function Select({ options, onChange, value, className, ...rest }: Props) 
       value={value}
       onChange={(e) => onChange(e.target.value)}
       className={classNames(
-        'w-full h-11 rounded-sm bg-bg-surface-2 border border-DEFAULT px-3 text-[14px]',
+        'w-full h-11 rounded-sm bg-bg-surface-2 border border-DEFAULT px-3 text-body',
         'text-text-primary outline-none focus:border-brand transition-colors duration-200 cursor-pointer',
         'appearance-none bg-no-repeat',
         className,

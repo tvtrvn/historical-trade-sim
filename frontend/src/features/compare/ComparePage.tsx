@@ -55,7 +55,7 @@ export function ComparePage() {
   };
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+    <div className="max-w-container mx-auto px-4 sm:px-6">
       <PageHeader
         eyebrow="Side by side"
         title={en.nav.compare}
@@ -135,7 +135,7 @@ function CompareView({
           ddPct={a.max_drawdown_pct}
         />
         <CompareCard
-          tone="lavender"
+          tone="caramel"
           title={bData.name}
           symbols={bData.positions.map((p) => p.symbol)}
           period={`${fmt.date(bData.start_date)} → ${fmt.date(bData.end_date)}`}
@@ -172,7 +172,7 @@ function CompareCard({
   cagrPct,
   ddPct,
 }: {
-  tone: 'brand' | 'lavender';
+  tone: 'brand' | 'caramel';
   title: string;
   symbols: string[];
   period: string;
@@ -187,17 +187,17 @@ function CompareCard({
       <div className="flex items-center gap-2">
         <span
           className={`inline-block w-2.5 h-2.5 rounded-full ${
-            tone === 'brand' ? 'bg-brand' : 'bg-lavender'
+            tone === 'brand' ? 'bg-brand' : 'bg-caramel'
           }`}
         />
         <Eyebrow>{tone === 'brand' ? 'A' : 'B'} · vs {benchmark}</Eyebrow>
       </div>
-      <h3 className="mt-2 text-[18px] font-semibold tracking-tight text-text-primary">{title}</h3>
+      <h3 className="mt-2 text-h3 font-semibold tracking-tight text-text-primary">{title}</h3>
       <div className="mt-2 flex items-center -space-x-2">
         {symbols.map((s) => (
           <TickerChip key={s} symbol={s} className="ring-2 ring-bg-surface" />
         ))}
-        <span className="ml-3 text-text-muted text-[12px]">{period}</span>
+        <span className="ml-3 text-text-muted text-caption">{period}</span>
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3">
         <Mini label="Final value" value={fmt.money(finalValue)} mono />
@@ -227,8 +227,8 @@ function Mini({
 }) {
   return (
     <div className="rounded-sm bg-bg-surface-2 border border-DEFAULT p-3">
-      <div className="text-[10.5px] uppercase tracking-[0.16em] text-text-muted">{label}</div>
-      <div className={`mt-1 ${mono ? 'font-mono tabular' : ''} text-[14px] ${tone}`}>{value}</div>
+      <div className="text-micro uppercase tracking-eyebrow text-text-muted">{label}</div>
+      <div className={`mt-1 ${mono ? 'font-mono tabular' : ''} text-body ${tone}`}>{value}</div>
     </div>
   );
 }

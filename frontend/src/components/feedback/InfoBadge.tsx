@@ -87,7 +87,7 @@ export function InfoBadge({ what, read, size = 'sm', label, className, children 
         onBlur={() => setOpen(false)}
         className={classNames(
           'inline-flex items-center justify-center rounded-full text-text-muted hover:text-text-primary',
-          'transition-colors duration-150 cursor-help',
+          'transition-colors duration-200 cursor-help',
           size === 'sm' ? 'w-4 h-4' : 'w-5 h-5',
           className,
         )}
@@ -116,9 +116,9 @@ export function InfoBadge({ what, read, size = 'sm', label, className, children 
                 onMouseEnter={() => setOpen(true)}
                 onMouseLeave={() => setOpen(false)}
               >
-                <div className="text-[12.5px] text-text-primary font-medium leading-snug">{what}</div>
+                <div className="text-body-s text-text-primary font-medium leading-snug">{what}</div>
                 {read ? (
-                  <div className="mt-2 pt-2 border-t border-DEFAULT text-[12px] text-text-secondary leading-relaxed">
+                  <div className="mt-2 pt-2 border-t border-DEFAULT text-caption text-text-secondary leading-relaxed">
                     {read}
                   </div>
                 ) : null}

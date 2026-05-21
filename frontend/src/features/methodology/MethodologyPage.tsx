@@ -19,7 +19,7 @@ export function MethodologyPage() {
   });
 
   return (
-    <div className="max-w-[1280px] mx-auto px-4 sm:px-6">
+    <div className="max-w-container mx-auto px-4 sm:px-6">
       <PageHeader
         eyebrow="The math, in plain English"
         title="Methodology"
@@ -39,7 +39,7 @@ export function MethodologyPage() {
               <div className="w-10 h-10 shrink-0 rounded-sm bg-aurum/10 text-aurum border border-DEFAULT grid place-items-center">
                 <BookOpen className="w-5 h-5" strokeWidth={1.5} />
               </div>
-              <p className="text-text-secondary text-[15px] leading-relaxed">{data.intro}</p>
+              <p className="text-text-secondary text-body leading-relaxed">{data.intro}</p>
             </div>
           </Card>
 
@@ -49,10 +49,10 @@ export function MethodologyPage() {
               <Lightbulb className="w-4 h-4 text-aurum" strokeWidth={1.6} />
               <Eyebrow tone="aurum">Glossary · plain English</Eyebrow>
             </div>
-            <h2 className="mt-3 font-display text-[26px] sm:text-[30px] tracking-tight text-text-primary">
+            <h2 className="mt-3 font-display text-h2 sm:text-h2 tracking-tight text-text-primary">
               {en.landing.glossary.title}
             </h2>
-            <p className="mt-2 text-text-secondary text-[14.5px] leading-relaxed max-w-2xl">
+            <p className="mt-2 text-text-secondary text-body leading-relaxed max-w-2xl">
               Each term below also appears as a tooltip on the actual metric in the results page.
             </p>
             <motion.div
@@ -68,12 +68,12 @@ export function MethodologyPage() {
                   variants={fadeUp}
                   className="rounded-md bg-bg-surface border border-DEFAULT shadow-card p-5 transition-[border-color] duration-200 hover:border-strong"
                 >
-                  <h3 className="text-[15.5px] font-semibold tracking-tight text-text-primary">
+                  <h3 className="text-body font-semibold tracking-tight text-text-primary">
                     {t.term}
                   </h3>
-                  <p className="mt-2 text-text-secondary text-[13.5px] leading-relaxed">{t.plain}</p>
-                  <div className="mt-3 pt-3 border-t border-DEFAULT flex items-start gap-2 text-[12px] text-text-muted leading-relaxed">
-                    <span className="text-aurum font-medium uppercase tracking-[0.14em] text-[10px] mt-[2px]">
+                  <p className="mt-2 text-text-secondary text-body-s leading-relaxed">{t.plain}</p>
+                  <div className="mt-3 pt-3 border-t border-DEFAULT flex items-start gap-2 text-caption text-text-muted leading-relaxed">
+                    <span className="text-aurum font-medium uppercase tracking-eyebrow text-micro mt-[2px]">
                       Why
                     </span>
                     <span>{t.why}</span>
@@ -97,7 +97,7 @@ export function MethodologyPage() {
                     <li key={s.id}>
                       <a
                         href={`#${s.id}`}
-                        className="block text-[13.5px] text-text-secondary hover:text-text-primary transition-colors py-1 cursor-pointer"
+                        className="block text-body-s text-text-secondary hover:text-text-primary transition-colors py-1 cursor-pointer"
                       >
                         {s.title}
                       </a>
@@ -119,10 +119,10 @@ export function MethodologyPage() {
                   <h2 className="mt-2 font-display text-2xl tracking-tight text-text-primary">
                     {s.title}
                   </h2>
-                  <p className="mt-3 font-mono text-[14px] text-text-primary bg-bg-surface-2 border border-DEFAULT rounded-sm px-3 py-2 inline-block">
+                  <p className="mt-3 font-mono text-body text-text-primary bg-bg-surface-2 border border-DEFAULT rounded-sm px-3 py-2 inline-block">
                     {s.summary}
                   </p>
-                  <p className="mt-4 text-text-secondary text-[15px] leading-relaxed">{s.details}</p>
+                  <p className="mt-4 text-text-secondary text-body leading-relaxed">{s.details}</p>
                 </motion.section>
               ))}
             </div>
@@ -130,10 +130,10 @@ export function MethodologyPage() {
 
           <HairlineDivider className="mt-12 mb-6" />
           <div className="flex items-center justify-between flex-wrap gap-3 mb-6">
-            <div className="text-[12.5px] text-text-muted">{data.disclaimer}</div>
+            <div className="text-body-s text-text-muted">{data.disclaimer}</div>
             <Link
               to="/builder"
-              className="inline-flex items-center gap-2 text-aurum hover:text-white transition-colors text-[14px] cursor-pointer"
+              className="inline-flex items-center gap-2 text-aurum hover:text-white transition-colors text-body cursor-pointer"
             >
               Build a scenario
               <ArrowRight className="w-4 h-4" />
