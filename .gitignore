@@ -18,6 +18,7 @@ local.db-journal
 
 # Local tooling / docs — keep out of the repo
 .claude/
+.cursor/
 AGENTS.md
 CLAUDE.md
 walkthrough.md
