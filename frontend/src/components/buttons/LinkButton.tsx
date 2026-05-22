@@ -13,11 +13,11 @@ interface Props {
 }
 
 const VARIANT = {
-  primary: 'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-clay',
+  primary: 'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-lift',
   secondary:
     'bg-transparent text-text-primary border border-strong hover:border-text-secondary hover:bg-bg-surface-2',
   ghost: 'bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
-  premium: 'gradient-border bg-bg-surface text-aurum hover:text-white hover:shadow-aurum',
+  premium: 'gradient-border bg-bg-surface text-aurum hover:text-white hover:shadow-lift',
 };
 
 const SIZE = {

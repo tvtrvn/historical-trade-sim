@@ -39,8 +39,7 @@ export function Hero() {
 
   return (
     <section className="relative overflow-hidden">
-      {/* Aurora backdrop + horizon hairline */}
-      <div className="absolute inset-0 bg-aurora pointer-events-none" aria-hidden />
+      {/* Flat graphite backdrop + horizon hairline */}
       <motion.div
         aria-hidden
         initial={{ opacity: 0 }}

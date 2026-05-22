@@ -31,8 +31,8 @@
 
 ### 2.1 Style Foundation
 
-- **Primary style:** **Editorial Dark Glass** — deep warm-espresso surfaces with
-  tasteful glassmorphism, layered gradients, and a single hairline accent.
+- **Primary style:** **Editorial Dark Glass** — neutral graphite surfaces with
+  tasteful glassmorphism, flat layered depth, and a single hairline accent.
 - **Secondary style:** **Precision Data** — chart areas are flat, high-contrast,
   with neutral grids and accent lines that do the talking.
 - **Glass usage rule:** glass on glass is forbidden. Glass cards live on tinted
@@ -40,77 +40,76 @@
 
 ### 2.2 Color Tokens
 
-> **Palette: "Warm Clay & Honey" (v2.0, 2026-05-21).** Replaced the original
-> cold navy + electric cobalt + lavender/purple with warm espresso surfaces and
-> earthy accents. All text/accent pairings verified WCAG AA (≥4.5:1) on every
-> surface. Token names in code: `bg.*`, `text.*`, `brand`, `aurum`, `caramel`,
+> **Palette: "Graphite & Indigo" (v3.0, 2026-05-22).** Replaced "Warm Clay &
+> Honey" with neutral graphite surfaces (no color temperature), one indigo-blue
+> primary, and a single amber highlight; gains/losses are muted green/red.
+> Brand/amber read AA (≥4.5:1) as text on canvas/surface. Token names in code
+> are unchanged: `bg.*`, `text.*`, `brand`, `aurum`, `caramel`,
 > `positive`/`negative`, `success`/`error`/`warning`/`info` (each `*-soft`).
 
 ```css
-/* Warm espresso canvas */
---bg-canvas:       #15110E;   /* page background */
---bg-canvas-2:     #1A140F;   /* under-hero, between sections */
---bg-surface:      #1E1813;   /* cards, panels */
---bg-surface-2:    #261E18;   /* hovered cards, nested panels */
---bg-elevated:     #2A211A;   /* modals, popovers */
+/* Neutral graphite canvas */
+--bg-canvas:       #0E0E10;   /* page background */
+--bg-canvas-2:     #121214;   /* under-hero, between sections */
+--bg-surface:      #18181B;   /* cards, panels */
+--bg-surface-2:    #1F1F23;   /* hovered cards, nested panels */
+--bg-elevated:     #26262B;   /* modals, popovers */
 
-/* Hairlines & dividers (warm taupe) */
---border-subtle:   rgba(168, 150, 132, 0.10);
---border-default:  rgba(168, 150, 132, 0.16);
---border-strong:   rgba(168, 150, 132, 0.26);
+/* Hairlines & dividers (neutral) */
+--border-subtle:   rgba(255, 255, 255, 0.06);
+--border-default:  rgba(255, 255, 255, 0.10);
+--border-strong:   rgba(255, 255, 255, 0.16);
 
 /* Text */
---text-primary:    #F3EDE4;
---text-secondary:  #C3B5A4;
---text-muted:      #A89684;   /* taupe; AA ≥5.5:1 on every surface */
---text-inverse:    #1A140F;
+--text-primary:    #F4F4F5;
+--text-secondary:  #B4B4BD;
+--text-muted:      #93939D;   /* neutral gray; AA ≥4.5:1 on every surface */
+--text-inverse:    #0E0E10;
 
 /* Brand & accents */
---brand:           #D9774B;   /* terracotta/clay — primary action, focus, line */
---brand-hover:     #E68A5E;
---accent-aurum:    #E6B24C;   /* honey gold — premium highlight, glow */
---accent-aurum-2:  #CE9B3C;
---accent-caramel:  #C99A6A;   /* benchmark series (renamed from lavender) */
+--brand:           #4C82F0;   /* indigo-blue — primary action, focus, link, line */
+--brand-hover:     #6A99F3;
+--accent-aurum:    #E0A23B;   /* amber — single warm highlight */
+--accent-aurum-2:  #C68C2E;
+--accent-caramel:  #B99C74;   /* benchmark series (muted tan) */
 
 /* Semantic */
---positive:        #7FA776;   /* gains, outperformance (sage) */
---positive-soft:   rgba(127, 167, 118, 0.13);
---negative:        #D2664F;   /* losses, drawdowns (warm rust) */
---negative-soft:   rgba(210, 102, 79, 0.13);
---warning:         #E6B24C;
---info:            #6FA8A0;   /* dusty teal */
+--positive:        #4EA46B;   /* gains, outperformance (muted green) */
+--positive-soft:   rgba(78, 164, 107, 0.13);
+--negative:        #D45D5D;   /* losses, drawdowns (muted red) */
+--negative-soft:   rgba(212, 93, 93, 0.13);
+--warning:         #E0A23B;
+--info:            #4C82F0;   /* indigo-blue */
 
 /* Chart palette (sequential, colorblind-aware) */
---chart-1: #D9774B;   /* portfolio */
---chart-2: #C99A6A;   /* benchmark */
---chart-3: #E6B24C;   /* highlight position */
---chart-4: #7FA776;   /* secondary positive */
---chart-5: #6FA8A0;   /* recurring contribution */
---chart-6: #C77B7B;   /* outlier / alt (warm rose) */
+--chart-1: #4C82F0;   /* portfolio (indigo) */
+--chart-2: #E0A23B;   /* benchmark/highlight (amber) */
+--chart-3: #4EA46B;   /* secondary positive (green) */
+--chart-4: #D45D5D;   /* negative (red) */
+--chart-5: #6FA8C7;   /* recurring contribution (steel) */
+--chart-6: #B99C74;   /* outlier / alt (tan) */
 ```
 
-> **Button contrast note:** white-on-clay is only ~3:1, so primary buttons use
-> **dark text** (`text-bg-canvas`) on the clay background (≈5.96:1). Clay stays
-> vivid as an accent/line/focus color on dark surfaces.
+> **Button contrast note:** white-on-indigo is only ~3.6:1, so primary buttons use
+> **dark text** (`text-bg-canvas`) on the brand background (≈5.2:1). Indigo stays
+> AA as a text/link/focus color on canvas/surface; on the most-elevated chips it
+> serves as a UI accent (≥3:1), not body text.
 
-### 2.3 Gradients & Glow
+### 2.3 Gradients & Elevation
 
 ```css
---gradient-aurora:
-  radial-gradient(1200px 600px at 20% 0%,  rgba(217,119,75,0.16), transparent 60%),
-  radial-gradient(900px  500px at 90% 10%, rgba(230,178,76,0.12), transparent 60%),
-  radial-gradient(700px  500px at 50% 100%, rgba(201,154,106,0.10), transparent 60%);
-
+/* No colored aurora backdrop — surfaces stay flat graphite. */
 --gradient-hairline:
-  linear-gradient(90deg, transparent, rgba(230,178,76,0.6), transparent);
+  linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent);
 
---glow-clay:    0 0 0 1px rgba(217,119,75,0.35), 0 12px 40px -8px rgba(217,119,75,0.45);
---glow-aurum:   0 0 0 1px rgba(230,178,76,0.30), 0 12px 40px -8px rgba(230,178,76,0.35);
+/* Neutral diffused elevation — no colored glows. */
 --shadow-card:  0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -24px rgba(0,0,0,0.7);
+--shadow-lift:  0 1px 0 rgba(255,255,255,0.05) inset, 0 18px 44px -18px rgba(0,0,0,0.75);
 ```
 
-> **Anti-pattern:** never use full-bleed neon glow, never animate gradients
-> faster than 8s, never stack three glow shadows on one element.
+> **Anti-pattern:** never use colored/neon glow shadows, never add a colored
+> ambient backdrop, never animate gradients faster than 8s, never stack three
+> shadows on one element.
 
 ---
 
@@ -187,7 +186,7 @@
 
 | Variant       | Background                       | Text          | Border                      |
 | ------------- | -------------------------------- | ------------- | --------------------------- |
-| **Primary**   | `brand` (clay) → `brand-hover` | `text-bg-canvas` (dark) | none, `shadow-clay` on hover |
+| **Primary**   | `brand` (indigo) → `brand-hover` | `text-bg-canvas` (dark) | none, `shadow-lift` on hover |
 | **Secondary** | `transparent`                    | `text-primary` | `border-strong`              |
 | **Ghost**     | `transparent`                    | `text-secondary` → primary on hover | none |
 | **Premium**   | `transparent` + 1px aurum gradient border | `accent-aurum` | gradient hairline           |

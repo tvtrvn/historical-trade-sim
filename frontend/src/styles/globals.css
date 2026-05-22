@@ -14,46 +14,47 @@
      <select> dropdown with our pale text inside it — illegible. */
   color-scheme: dark;
 
-  /* Warm Clay & Honey — mirror of tailwind.config.js. Keep in sync. */
-  --bg-canvas: #15110e;
-  --bg-canvas-2: #1a140f;
-  --bg-surface: #1e1813;
-  --bg-surface-2: #261e18;
-  --bg-elevated: #2a211a;
+  /* Graphite & Indigo — mirror of tailwind.config.js. Keep in sync. */
+  --bg-canvas: #0e0e10;
+  --bg-canvas-2: #121214;
+  --bg-surface: #18181b;
+  --bg-surface-2: #1f1f23;
+  --bg-elevated: #26262b;
 
-  --border-subtle: rgba(168, 150, 132, 0.1);
-  --border-default: rgba(168, 150, 132, 0.16);
-  --border-strong: rgba(168, 150, 132, 0.26);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --border-default: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.16);
 
-  --text-primary: #f3ede4;
-  --text-secondary: #c3b5a4;
-  /* taupe; clears WCAG AA (≥5.5:1) on every surface token. */
-  --text-muted: #a89684;
+  --text-primary: #f4f4f5;
+  --text-secondary: #b4b4bd;
+  /* neutral gray; clears WCAG AA (≥4.5:1) on every surface token. */
+  --text-muted: #93939d;
 
-  --brand: #d9774b;
-  --brand-hover: #e68a5e;
-  --aurum: #e6b24c;
-  --aurum-dim: #ce9b3c;
-  --caramel: #c99a6a;
-  --positive: #7fa776;
-  --negative: #d2664f;
+  --brand: #4c82f0;
+  --brand-hover: #6a99f3;
+  --aurum: #e0a23b;
+  --aurum-dim: #c68c2e;
+  --caramel: #b99c74;
+  --positive: #4ea46b;
+  --negative: #d45d5d;
 
   /* Semantic state colors (mirror tailwind.config.js). */
-  --success: #7fa776;
-  --success-soft: rgba(127, 167, 118, 0.13);
-  --error: #d2664f;
-  --error-soft: rgba(210, 102, 79, 0.13);
-  --warning: #e6b24c;
-  --warning-soft: rgba(230, 178, 76, 0.13);
-  --info: #6fa8a0;
-  --info-soft: rgba(111, 168, 160, 0.13);
+  --success: #4ea46b;
+  --success-soft: rgba(78, 164, 107, 0.13);
+  --error: #d45d5d;
+  --error-soft: rgba(212, 93, 93, 0.13);
+  --warning: #e0a23b;
+  --warning-soft: rgba(224, 162, 59, 0.13);
+  --info: #4c82f0;
+  --info-soft: rgba(76, 130, 240, 0.13);
 
-  --chart-1: #d9774b;
-  --chart-2: #c99a6a;
-  --chart-3: #e6b24c;
-  --chart-4: #7fa776;
-  --chart-5: #6fa8a0;
-  --chart-6: #c77b7b;
+  /* Chart series — indigo, amber, green, red, steel, tan. Distinct on graphite. */
+  --chart-1: #4c82f0;
+  --chart-2: #e0a23b;
+  --chart-3: #4ea46b;
+  --chart-4: #d45d5d;
+  --chart-5: #6fa8c7;
+  --chart-6: #b99c74;
 
   --ease-premium: cubic-bezier(0.22, 0.61, 0.36, 1);
 }
@@ -86,7 +87,7 @@ html {
 
 /* Selection & focus that match the brand. */
 ::selection {
-  background: rgba(217, 119, 75, 0.32);
+  background: rgba(76, 130, 240, 0.32);
   color: #fff;
 }
 
@@ -99,20 +100,20 @@ html {
 /* Scrollbars: discrete, dark, hairline thumb. */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(168, 150, 132, 0.2) transparent;
+  scrollbar-color: rgba(255, 255, 255, 0.18) transparent;
 }
 *::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 *::-webkit-scrollbar-thumb {
-  background: rgba(168, 150, 132, 0.2);
+  background: rgba(255, 255, 255, 0.18);
   border-radius: 8px;
   border: 2px solid transparent;
   background-clip: padding-box;
 }
 *::-webkit-scrollbar-thumb:hover {
-  background: rgba(168, 150, 132, 0.3);
+  background: rgba(255, 255, 255, 0.28);
   background-clip: padding-box;
 }
 
@@ -121,14 +122,14 @@ html {
    Glass cards live ONLY on tinted backgrounds. Never glass-on-glass.
    ─────────────────────────────────────────────────────────────────────── */
 .glass {
-  background: linear-gradient(180deg, rgba(38, 30, 24, 0.65), rgba(30, 24, 19, 0.55));
+  background: linear-gradient(180deg, rgba(38, 38, 43, 0.65), rgba(24, 24, 27, 0.55));
   border: 1px solid var(--border-default);
   backdrop-filter: blur(14px) saturate(140%);
   -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
 .hairline {
-  background: linear-gradient(90deg, transparent, rgba(230, 178, 76, 0.55), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
 }
 
 /* Shimmer over a flat surface; used for loading skeletons. */
@@ -172,7 +173,7 @@ html {
   inset: 0;
   padding: 1px;
   border-radius: inherit;
-  background: linear-gradient(135deg, rgba(230, 178, 76, 0.5), rgba(217, 119, 75, 0.35) 60%, transparent);
+  background: linear-gradient(135deg, rgba(224, 162, 59, 0.45), rgba(76, 130, 240, 0.3) 60%, transparent);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;

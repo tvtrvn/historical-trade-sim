@@ -14,12 +14,12 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const VARIANT: Record<Variant, string> = {
   primary:
-    'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-clay focus-visible:ring-brand',
+    'bg-brand text-bg-canvas hover:bg-brand-hover hover:shadow-lift focus-visible:ring-brand',
   secondary:
     'bg-transparent text-text-primary border border-strong hover:border-text-secondary hover:bg-bg-surface-2',
   ghost: 'bg-transparent text-text-secondary hover:text-text-primary hover:bg-bg-surface-2',
   premium:
-    'gradient-border bg-bg-surface text-aurum hover:text-white hover:shadow-aurum',
+    'gradient-border bg-bg-surface text-aurum hover:text-white hover:shadow-lift',
   danger:
     'bg-transparent text-error border border-error/40 hover:bg-error/10 hover:border-error',
 };

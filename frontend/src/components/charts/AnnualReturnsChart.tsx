@@ -37,7 +37,7 @@ export function AnnualReturnsChart({ metrics }: Props) {
           width={48}
         />
         <Tooltip
-          cursor={{ fill: 'rgba(168,150,132,0.06)' }}
+          cursor={{ fill: 'rgba(255,255,255,0.05)' }}
           content={<ChartTooltip showDate={false} formatter={(n) => `${n.toFixed(2)}%`} />}
         />
         <Bar dataKey="Portfolio" radius={[4, 4, 0, 0]} maxBarSize={28}>

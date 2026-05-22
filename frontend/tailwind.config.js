@@ -8,48 +8,49 @@ export default {
         sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
       },
-      // ── Warm Clay & Honey palette ──────────────────────────────────────
-      // Warm espresso surfaces (no cold navy), a terracotta/clay primary, a
-      // honey-gold highlight, and earthy semantic colors. All text/accent
-      // pairings verified ≥4.5:1 (WCAG AA) on every surface token.
+      // ── Graphite & Indigo palette ──────────────────────────────────────
+      // Neutral graphite surfaces (no color temperature), one indigo-blue
+      // primary, a single amber highlight, and muted directional semantics.
+      // Brand/amber read AA (≥4.5:1) as text on canvas/surface; on solid fills
+      // they pair with dark (text-bg-canvas) labels. No colored glows.
       colors: {
         bg: {
-          canvas: '#15110E',
-          canvas2: '#1A140F',
-          surface: '#1E1813',
-          surface2: '#261E18',
-          elevated: '#2A211A',
+          canvas: '#0E0E10',
+          canvas2: '#121214',
+          surface: '#18181B',
+          surface2: '#1F1F23',
+          elevated: '#26262B',
         },
         text: {
-          primary: '#F3EDE4',
-          secondary: '#C3B5A4',
-          // taupe; clears WCAG AA (≥5.5:1) on every surface token.
-          muted: '#A89684',
-          inverse: '#1A140F',
+          primary: '#F4F4F5',
+          secondary: '#B4B4BD',
+          // neutral gray; clears WCAG AA (≥4.5:1) on every surface token.
+          muted: '#93939D',
+          inverse: '#0E0E10',
         },
         brand: {
-          // terracotta/clay. Vivid as an accent on dark; primary buttons use
-          // dark (text-bg-canvas) labels since white-on-clay is only ~3:1.
-          DEFAULT: '#D9774B',
-          hover: '#E68A5E',
+          // indigo-blue. AA as text/icon on canvas/surface; primary buttons
+          // use dark (text-bg-canvas) labels since white-on-blue is only ~3.6:1.
+          DEFAULT: '#4C82F0',
+          hover: '#6A99F3',
         },
         aurum: {
-          // honey gold (warm highlight / premium accent).
-          DEFAULT: '#E6B24C',
-          dim: '#CE9B3C',
+          // amber — the single warm highlight / premium accent.
+          DEFAULT: '#E0A23B',
+          dim: '#C68C2E',
         },
-        // caramel = benchmark series (replaces the old lavender/purple).
-        caramel: '#C99A6A',
-        // Directional finance colors (gain/loss). Sage up, warm rust down.
-        positive: '#7FA776',
-        negative: '#D2664F',
+        // caramel = benchmark series (muted tan, distinct from the amber accent).
+        caramel: '#B99C74',
+        // Directional finance colors (gain/loss). Muted green up, muted red down.
+        positive: '#4EA46B',
+        negative: '#D45D5D',
         // Semantic state colors. success/error mirror positive/negative so the
         // finance hues and UI states stay in lockstep; each carries a *-soft
         // tint for fills/badges. Use these for status, not raw accents.
-        success: { DEFAULT: '#7FA776', soft: 'rgba(127, 167, 118, 0.13)' },
-        error: { DEFAULT: '#D2664F', soft: 'rgba(210, 102, 79, 0.13)' },
-        warning: { DEFAULT: '#E6B24C', soft: 'rgba(230, 178, 76, 0.13)' },
-        info: { DEFAULT: '#6FA8A0', soft: 'rgba(111, 168, 160, 0.13)' },
+        success: { DEFAULT: '#4EA46B', soft: 'rgba(78, 164, 107, 0.13)' },
+        error: { DEFAULT: '#D45D5D', soft: 'rgba(212, 93, 93, 0.13)' },
+        warning: { DEFAULT: '#E0A23B', soft: 'rgba(224, 162, 59, 0.13)' },
+        info: { DEFAULT: '#4C82F0', soft: 'rgba(76, 130, 240, 0.13)' },
       },
       // Discrete type scale (size + line-height) mirrored from MASTER.md §3.
       // Weight and tracking stay as separate utilities so existing
@@ -81,16 +82,16 @@ export default {
         container: '1280px',
       },
       borderColor: {
-        // warm taupe hairlines (replaces cool slate borders)
-        subtle: 'rgba(168, 150, 132, 0.10)',
-        DEFAULT: 'rgba(168, 150, 132, 0.16)',
-        strong: 'rgba(168, 150, 132, 0.26)',
+        // neutral hairlines on graphite
+        subtle: 'rgba(255, 255, 255, 0.06)',
+        DEFAULT: 'rgba(255, 255, 255, 0.10)',
+        strong: 'rgba(255, 255, 255, 0.16)',
       },
       boxShadow: {
+        // Neutral diffused elevation — no colored glows. A wide soft ambient
+        // shadow plus a 1px top inner highlight; `lift` is the hover variant.
         card: '0 1px 0 rgba(255,255,255,0.04) inset, 0 24px 60px -24px rgba(0,0,0,0.7)',
-        // clay glow (replaces the old cobalt glow)
-        clay: '0 0 0 1px rgba(217,119,75,0.35), 0 12px 40px -8px rgba(217,119,75,0.45)',
-        aurum: '0 0 0 1px rgba(230,178,76,0.30), 0 12px 40px -8px rgba(230,178,76,0.35)',
+        lift: '0 1px 0 rgba(255,255,255,0.05) inset, 0 18px 44px -18px rgba(0,0,0,0.75)',
       },
       borderRadius: {
         xs: '6px',
@@ -100,10 +101,10 @@ export default {
         xl: '28px',
       },
       backgroundImage: {
-        aurora:
-          'radial-gradient(1200px 600px at 20% 0%, rgba(217,119,75,0.16), transparent 60%), radial-gradient(900px 500px at 90% 10%, rgba(230,178,76,0.12), transparent 60%), radial-gradient(700px 500px at 50% 100%, rgba(201,154,106,0.10), transparent 60%)',
+        // Neutral hairline for horizon dividers. No colored aurora backdrop —
+        // surfaces stay flat graphite.
         hairline:
-          'linear-gradient(90deg, transparent, rgba(230,178,76,0.6), transparent)',
+          'linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)',
       },
       transitionTimingFunction: {
         premium: 'cubic-bezier(0.22, 0.61, 0.36, 1)',

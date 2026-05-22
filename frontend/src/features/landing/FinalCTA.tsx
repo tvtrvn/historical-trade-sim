@@ -8,7 +8,6 @@ export function FinalCTA() {
   return (
     <section className="max-w-container mx-auto px-4 sm:px-6 pt-12 pb-20 sm:pb-24">
       <div className="relative overflow-hidden rounded-lg gradient-border bg-bg-surface p-7 sm:p-10 lg:p-16">
-        <div aria-hidden className="absolute inset-0 bg-aurora opacity-70 pointer-events-none" />
         <div className="relative">
           <Eyebrow tone="aurum">Ready when you are</Eyebrow>
           <h2 className="mt-3 font-display text-h2 sm:text-4xl lg:text-5xl tracking-tight text-text-primary max-w-xl leading-[1.08]">

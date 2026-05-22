@@ -16,12 +16,6 @@ const SAMPLE_SPARK = [
 export function ScenarioFloatCard() {
   return (
     <div className="relative">
-      {/* Glow halo */}
-      <div
-        aria-hidden
-        className="absolute -inset-12 bg-aurora opacity-60 blur-2xl pointer-events-none"
-      />
-
       <div className="relative gradient-border bg-bg-surface rounded-lg p-6 shadow-card">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
