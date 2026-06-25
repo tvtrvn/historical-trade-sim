@@ -42,6 +42,13 @@ This project is indexed by GitNexus as **historical-trade-sim** (1962 symbols, 2
 
 <!-- gitnexus:end -->
 
+## Project rules
+
+- **Purpose:** Replay any investment decision against real historical price data, rendering a premium fintech-terminal results dashboard (return, CAGR, drawdown, benchmark overlay).
+- **Layout:** `backend/` (Python · FastAPI) · `frontend/` (TS · Vite + React) · `design-system/` (persisted UI/UX system) · `docs/`
+- **Build / test:** backend — `uvicorn app.main:app --reload --port 8000`, `cd backend && pytest -q` ; frontend — `npm run dev`, `npm run build`, `npm run typecheck`, `npm run lint`
+- **Do / don't:** Explain every metric twice (analyst + plain English); don't add unrequested config knobs or layers. Global coding standards live in `~/.claude/CLAUDE.md`.
+
 <!-- skills:start -->
 ## Available Skills
 

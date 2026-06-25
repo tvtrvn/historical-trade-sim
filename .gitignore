@@ -20,5 +20,13 @@ local.db-shm
 
 # Local tooling / docs — keep out of the repo
 .claude/
+.claude/settings.local.json
 .cursor/
 walkthrough.md
+
+# Build output
+.next/
+build/
+
+# Env
+.env.*
