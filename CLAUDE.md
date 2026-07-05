@@ -61,7 +61,7 @@ _None — this project uses the inherited global set below._
 
 ### Inherited global skills — descriptions in [../SKILLS.md](../SKILLS.md)
 
-- **code:** `gitnexus-cli` · `gitnexus-debugging` · `gitnexus-exploring` · `gitnexus-guide` · `gitnexus-impact-analysis` · `gitnexus-pr-review` · `gitnexus-refactoring`
+- **code:** `gitnexus-cli` · `gitnexus-debugging` · `gitnexus-exploring` · `gitnexus-guide` · `gitnexus-impact-analysis` · `gitnexus-pr-review` · `gitnexus-refactoring` · `vercel-react-best-practices`
 - **design:** `brandkit` · `design-taste-frontend` · `high-end-visual-design` · `image-to-code` · `impeccable-detector` · `redesign-existing-projects` · `stitch-design-taste` · `ui-ux-pro-max`
 - **docs:** `find-docs` · `walkthrough`
 - **meta:** `claudescore` · `context-budget` · `find-skills` · `full-output-enforcement` · `session-wrap` · `skill-updater`
